@@ -10,13 +10,11 @@ function NavBar() {
           <div className="header_top">
             <div className="container-fluid">
               <div className="contact_nav">
-                <a href="">
-                  <i className="fa fa-phone" aria-hidden="true"></i>
-                  <span>Call : +01 123455678990</span>
-                </a>
-                <a href="">
+                <a href="/home">
                   <i className="fa fa-envelope" aria-hidden="true"></i>
-                  <span>Email : demo@gmail.com</span>
+                  <span> Welcome, {name} ! </span>
+                </a> 
+                <a href="">
                   <button onClick={handleLogout}> LOGOUT </button>
                 </a>
               </div>

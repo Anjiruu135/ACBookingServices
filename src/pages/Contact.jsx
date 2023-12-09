@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAuthentication from "../methods/auth";
 import NotAuthorized from "./NotAuthorized";
+import axios from "axios";
 
 function Contact() {
-  const { auth, message, name, handleLogout } = useAuthentication();
+  const { auth, message, name, user_id, handleLogout } = useAuthentication();
+  const [formData, setFormData] = useState({
+    fullname: "",
+    phone: "",
+    email: "",
+    location: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formDataWithAuth = {
+        ...formData,
+        user_id: user_id,
+      };
+      const response = await axios.post(
+        "http://localhost:3001/inquire",
+        formDataWithAuth
+      );
+      console.log(response);
+      alert("Submission successful");
+      window.location.href = "/home";
+    } catch (error) {
+      console.error("Error submission:", error.message);
+    }
+  };
   return (
     <>
       {auth ? (
@@ -41,12 +72,15 @@ function Contact() {
               </div>
               <div className="row">
                 <div className="col-md-6">
-                  <form action="">
+                  <form method="post" onSubmit={handleSubmit}>
                     <div>
                       <input
                         className="form-control"
                         type="text"
-                        placeholder="Name"
+                        placeholder="Full Name"
+                        name="fullname"
+                        value={formData.fullname}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -54,6 +88,9 @@ function Contact() {
                         className="form-control"
                         type="text"
                         placeholder="Phone Number"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -61,6 +98,19 @@ function Contact() {
                         className="form-control"
                         type="text"
                         placeholder="Email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Location"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -69,10 +119,13 @@ function Contact() {
                         type="text"
                         style={{ height: "150px" }}
                         placeholder="Message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="d-flex">
-                      <button> SEND </button>
+                      <button type="submit"> SEND </button>
                     </div>
                   </form>
                 </div>
