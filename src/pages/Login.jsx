@@ -7,6 +7,8 @@ function Login() {
     password: '',
   });
 
+  axios.defaults.withCredentials = true;
+
   const handleLoginChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };

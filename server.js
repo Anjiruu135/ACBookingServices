@@ -1,12 +1,19 @@
 import express, { json } from "express";
 import cors from "cors";
+import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import { createConnection } from "mysql";
 
 const app = express();
 const port = 3001;
 
 app.use(json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ["POST", "GET"],
+  credentials: true
+}));
 
 
 const db = createConnection({
@@ -22,6 +29,26 @@ db.connect((err) => {
   } else {
     console.log("Connected to the MySQL database");
   }
+});
+
+const verifyUser = (req, res, next) => {
+  const token = req.cookies.token;
+  if(!token) {
+    return res.json({Error: "You are not authorized"});
+  } else {
+    jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+      if(err) {
+        return res.json({Error: "Invalid Token"});
+      } else {
+        req.username = decoded.username;
+        next();
+      }
+    });
+  }
+}
+
+app.get('/', verifyUser, (req, res) => {
+  return res.json({Status: "Success", username: req.username});
 });
 
 app.post("/register", (req, res) => {
@@ -74,6 +101,10 @@ app.post("/login", (req, res) => {
         res.status(500).send("Error during login");
       } else {
         if (result.length > 0) {
+          const username = result[0].username;
+          const token = jwt.sign({username}, "jwt-secret-key", {expiresIn: '1d'});
+          res.cookie('token', token);
+          console.log(username);
           res.status(200).send("Login successful");
         } else {
           res.status(401).send("Invalid email or password");
@@ -82,6 +113,11 @@ app.post("/login", (req, res) => {
     }
   );
 });
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  return res.json({Status: "Success"})
+})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

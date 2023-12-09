@@ -1,7 +1,8 @@
 import React from "react";
+import useAuthentication  from "../methods/auth";
 
 function NavBar() {
-
+  const { auth, message, name, handleLogout } = useAuthentication();
   return (
     <>
       <div className="hero_area">
@@ -16,7 +17,7 @@ function NavBar() {
                 <a href="">
                   <i className="fa fa-envelope" aria-hidden="true"></i>
                   <span>Email : demo@gmail.com</span>
-                  <button onClick= {handleLogout}> LOGOUT </button>
+                  <button onClick={handleLogout}> LOGOUT </button>
                 </a>
               </div>
             </div>
