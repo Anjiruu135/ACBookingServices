@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function Register() {
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    phone: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3001/register', formData);
+      alert(response.data);
+      console.log(response.data);
+      alert('Register successful');
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error registering user:', error.message);
+    }
+  };
+
   return (
     <>
       <div className="hero_area">
@@ -20,21 +45,35 @@ function Register() {
                       {" "}
                       AIRCON REGISTER
                     </span>
-                    <form className="text-center" method="post">
+                    <form className="text-center" method="post" onSubmit={handleSubmit}>
                       <div className="mb-3">
                         <input
                           className="form-control"
                           type="email"
                           name="email"
                           placeholder="Email"
+                          value={formData.email}
+                          onChange={handleChange}
                         />
                       </div>
                       <div className="mb-3">
                         <input
                           className="form-control"
-                          type="email"
-                          name="phonenumber"
+                          type="text"
+                          name="username"
+                          placeholder="Username"
+                          value={formData.username}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="phone"
                           placeholder="Phone Number"
+                          value={formData.phone}
+                          onChange={handleChange}
                         />
                       </div>
                       <div className="mb-3">
@@ -43,6 +82,8 @@ function Register() {
                           type="password"
                           name="password"
                           placeholder="Password"
+                          value={formData.password}
+                          onChange={handleChange}
                         />
                       </div>
                       <div className="mb-3">

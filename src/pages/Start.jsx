@@ -23,7 +23,7 @@ function Start() {
                   </p>
                   <a href="/login">LOGIN</a>
                   <a href="/register" style={{ marginLeft: "20px" }}>
-                    RESGISTER
+                    REGISTER
                   </a>
                 </div>
               </div>

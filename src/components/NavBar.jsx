@@ -1,6 +1,7 @@
 import React from "react";
 
 function NavBar() {
+
   return (
     <>
       <div className="hero_area">
@@ -15,6 +16,7 @@ function NavBar() {
                 <a href="">
                   <i className="fa fa-envelope" aria-hidden="true"></i>
                   <span>Email : demo@gmail.com</span>
+                  <button onClick= {handleLogout}> LOGOUT </button>
                 </a>
               </div>
             </div>
