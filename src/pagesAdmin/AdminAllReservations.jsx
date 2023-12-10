@@ -3,13 +3,13 @@ import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from "axios";
 
-function AdminReservationList() {
+function AdminAllReservations() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
   const [reservationData, setReservationData] = useState([]);
 
   const getReservationData = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/reservation/data/pending');
+      const response = await axios.get('http://localhost:3001/reservation/data'); 
       setReservationData(response.data);
       console.log('Reservation Data:', response.data);
     } catch (error) {
@@ -20,26 +20,6 @@ function AdminReservationList() {
   useEffect(() => {
     getReservationData();
   }, []);
-
-  const handleActionClick = (reservationId, action) => {
-    const updatedData = reservationData.map((reservation) => {
-      if (reservation.reservation_id === reservationId) {
-        return { ...reservation, status: action };
-      }
-      return reservation;
-    });
-  
-    console.log(updatedData);
-  
-    axios.post('http://localhost:3001/reservation/data/update', { updatedData })
-      .then(response => {
-        console.log(response.data);
-        window.location.reload();
-      })
-      .catch(error => {
-        console.error('Error updating reservation:', error);
-      });
-  };
 
   return (
     <>
@@ -89,7 +69,7 @@ function AdminReservationList() {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link active" href="/adminreservations">
+                    <a className="nav-link" href="/adminreservations">
                       <i className="fas fa-table"></i>
                       <span>Pending Reservations</span>
                     </a>
@@ -101,7 +81,7 @@ function AdminReservationList() {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="/adminreservationrecords">
+                    <a className="nav-link active" href="/adminreservationrecords">
                       <i className="fas fa-table"></i>
                       <span>Reservations Record</span>
                     </a>
@@ -196,7 +176,7 @@ function AdminReservationList() {
                               <th>Message</th>
                               <th>Date Inquired</th>
                               <th>Status</th>
-                              <th>Actions</th>
+                              <th>Date Updated</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -211,29 +191,7 @@ function AdminReservationList() {
                                 <td>{reservation.message}</td>
                                 <td>{reservation.date_inquired}</td>
                                 <td>{reservation.status}</td>
-                                <td>
-                                  <button
-                                    className="btn btn-primary btn-sm"
-                                    style={{
-                                      background: "rgb(90,223,78)",
-                                      borderStyle: "none",
-                                    }}
-                                    onClick={() => handleActionClick(reservation.reservation_id, 'approved')}
-                                  >
-                                    Approve
-                                  </button>
-                                  <button
-                                    className="btn btn-primary btn-sm"
-                                    style={{
-                                      background: "rgb(223,78,78)",
-                                      borderStyle: "none",
-                                      marginLeft: "10px",
-                                    }}
-                                    onClick={() => handleActionClick(reservation.reservation_id, 'denied')}
-                                  >
-                                    Deny
-                                  </button>
-                                </td>
+                                <td>{reservation.date_updated}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -248,7 +206,7 @@ function AdminReservationList() {
                               <th>Message</th>
                               <th>Date Inquired</th>
                               <th>Status</th>
-                              <th>Actions</th>
+                              <th>Date Updated</th>
                             </tr>
                           </tfoot>
                         </table>
@@ -280,7 +238,7 @@ function AdminReservationList() {
       )}
       ;
     </>
-  );
+  )
 }
 
-export default AdminReservationList;
+export default AdminAllReservations

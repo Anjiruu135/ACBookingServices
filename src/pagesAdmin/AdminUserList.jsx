@@ -3,41 +3,32 @@ import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from "axios";
 
-function AdminReservationList() {
+function AdminUserList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
-  const [reservationData, setReservationData] = useState([]);
+  const [userData, setUserData] = useState([]);
 
-  const getReservationData = async () => {
+  const getUserData = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/reservation/data/pending');
-      setReservationData(response.data);
-      console.log('Reservation Data:', response.data);
+      const response = await axios.get("http://localhost:3001/user/data");
+      setUserData(response.data);
+      console.log("User Data:", response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    getReservationData();
+    getUserData();
   }, []);
 
-  const handleActionClick = (reservationId, action) => {
-    const updatedData = reservationData.map((reservation) => {
-      if (reservation.reservation_id === reservationId) {
-        return { ...reservation, status: action };
-      }
-      return reservation;
-    });
-  
-    console.log(updatedData);
-  
-    axios.post('http://localhost:3001/reservation/data/update', { updatedData })
-      .then(response => {
+  const handleRemoveClick = (userId) => {
+    axios.delete(`http://localhost:3001/users/${userId}`)
+      .then((response) => {
         console.log(response.data);
         window.location.reload();
       })
-      .catch(error => {
-        console.error('Error updating reservation:', error);
+      .catch((error) => {
+        console.error('Error deleting user:', error);
       });
   };
 
@@ -77,7 +68,7 @@ function AdminReservationList() {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="/adminusers">
+                    <a className="nav-link active" href="/adminusers">
                       <i className="fas fa-user"></i>
                       <span>Users</span>
                     </a>
@@ -89,7 +80,7 @@ function AdminReservationList() {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link active" href="/adminreservations">
+                    <a className="nav-link" href="/adminreservations">
                       <i className="fas fa-table"></i>
                       <span>Pending Reservations</span>
                     </a>
@@ -113,11 +104,12 @@ function AdminReservationList() {
                     </a>
                   </li>
                 </ul>
+                <div className="text-center d-none d-md-inline"></div>
               </div>
             </nav>
             <div className="d-flex flex-column" id="content-wrapper">
               <div id="content">
-                <nav className="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
+                <nav className="bg-white navbar navbar-expand shadow mb-4 topbar static-top navbar-light">
                   <div className="container-fluid">
                     <button
                       className="btn btn-link d-md-none rounded-circle me-3"
@@ -146,12 +138,10 @@ function AdminReservationList() {
                   </div>
                 </nav>
                 <div className="container-fluid">
-                  <h3 className="text-dark mb-4">Reservations</h3>
+                  <h3 className="text-dark mb-4">Employee List</h3>
                   <div className="card shadow">
                     <div className="card-header py-3">
-                      <p className="fw-bold text-primary m-0">
-                        Reservation Info
-                      </p>
+                      <p className="fw-bold text-primary m-0">Employee Info</p>
                     </div>
                     <div className="card-body">
                       <div className="row">
@@ -187,51 +177,30 @@ function AdminReservationList() {
                         <table className="table my-0" id="dataTable">
                           <thead>
                             <tr>
-                              <th>Reservation ID</th>
                               <th>User ID</th>
-                              <th>Fullname </th>
-                              <th>Phone Number</th>
                               <th>Email</th>
-                              <th>Location</th>
-                              <th>Message</th>
-                              <th>Date Inquired</th>
-                              <th>Status</th>
-                              <th>Actions</th>
+                              <th>Username</th>
+                              <th>Phone Number</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {reservationData.map((reservation) => (
-                              <tr key={reservation.reservation_id}>
-                                <td>{reservation.reservation_id}</td>
-                                <td>{reservation.user_id}</td>
-                                <td>{reservation.fullname}</td>
-                                <td>{reservation.phone_number}</td>
-                                <td>{reservation.email}</td>
-                                <td>{reservation.location}</td>
-                                <td>{reservation.message}</td>
-                                <td>{reservation.date_inquired}</td>
-                                <td>{reservation.status}</td>
+                            {userData.map((user) => (
+                              <tr key={user.user_id}>
+                                <td>{user.user_id}</td>
+                                <td>{user.email}</td>
+                                <td>{user.username}</td>
+                                <td>{user.phone_number}</td>
                                 <td>
                                   <button
                                     className="btn btn-primary btn-sm"
                                     style={{
-                                      background: "rgb(90,223,78)",
-                                      borderStyle: "none",
-                                    }}
-                                    onClick={() => handleActionClick(reservation.reservation_id, 'approved')}
-                                  >
-                                    Approve
-                                  </button>
-                                  <button
-                                    className="btn btn-primary btn-sm"
-                                    style={{
                                       background: "rgb(223,78,78)",
-                                      borderStyle: "none",
-                                      marginLeft: "10px",
+                                      borderColor: "rgb(223,78,78)",
                                     }}
-                                    onClick={() => handleActionClick(reservation.reservation_id, 'denied')}
+                                    onClick={() => handleRemoveClick(user.user_id)}
                                   >
-                                    Deny
+                                    Remove
                                   </button>
                                 </td>
                               </tr>
@@ -239,16 +208,11 @@ function AdminReservationList() {
                           </tbody>
                           <tfoot>
                             <tr>
-                              <th>Reservation ID</th>
                               <th>User ID</th>
-                              <th>Fullname </th>
-                              <th>Phone Number</th>
                               <th>Email</th>
-                              <th>Location</th>
-                              <th>Message</th>
-                              <th>Date Inquired</th>
-                              <th>Status</th>
-                              <th>Actions</th>
+                              <th>Username</th>
+                              <th>Phone Number</th>
+                              <th>Action</th>
                             </tr>
                           </tfoot>
                         </table>
@@ -256,6 +220,7 @@ function AdminReservationList() {
                     </div>
                   </div>
                 </div>
+                <a className="btn btn-info btn-icon-split" role="button"></a>
               </div>
               <footer className="bg-white sticky-footer">
                 <div className="container my-auto">
@@ -283,4 +248,4 @@ function AdminReservationList() {
   );
 }
 
-export default AdminReservationList;
+export default AdminUserList;

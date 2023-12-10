@@ -21,6 +21,18 @@ function AdminEmployeeList() {
     getEmployeeData();
   }, []);
 
+  const handleRemoveClick = (employeeId) => {
+    axios.delete(`http://localhost:3001/employee/${employeeId}`)
+      .then((response) => {
+        console.log(response.data);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error deleting user:', error);
+      });
+  };
+
+
   return (
     <>
       {authAdmin ? (
@@ -57,8 +69,14 @@ function AdminEmployeeList() {
                     </a>
                   </li>
                   <li className="nav-item">
+                    <a className="nav-link" href="/adminusers">
+                      <i className="fas fa-user"></i>
+                      <span>Users</span>
+                    </a>
+                  </li>
+                  <li className="nav-item">
                     <a className="nav-link active" href="/adminemployees">
-                      <i className="fas fa-table"></i>
+                      <i className="fas fa-user"></i>
                       <span>Employees</span>
                     </a>
                   </li>
@@ -72,6 +90,12 @@ function AdminEmployeeList() {
                     <a className="nav-link" href="/adminjoborders">
                       <i className="fas fa-table"></i>
                       <span>Job Orders</span>
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/adminreservationrecords">
+                      <i className="fas fa-table"></i>
+                      <span>Reservations Record</span>
                     </a>
                   </li>
                   <li className="nav-item">
@@ -177,7 +201,7 @@ function AdminEmployeeList() {
                                     background: "rgb(223,78,78)",
                                     borderColor: "rgb(223,78,78)",
                                   }}
-                                  type="submit"
+                                  onClick={() => handleRemoveClick(employee.employee_id)}
                                 >
                                   Remove
                                 </button>

@@ -61,8 +61,14 @@ function AdminAddEmployee() {
                     </a>
                   </li>
                   <li className="nav-item">
+                    <a className="nav-link" href="/adminusers">
+                      <i className="fas fa-user"></i>
+                      <span>Users</span>
+                    </a>
+                  </li>
+                  <li className="nav-item">
                     <a className="nav-link" href="/adminemployees">
-                      <i className="fas fa-table"></i>
+                      <i className="fas fa-user"></i>
                       <span>Employees</span>
                     </a>
                   </li>
@@ -76,6 +82,12 @@ function AdminAddEmployee() {
                     <a className="nav-link" href="/adminjoborders">
                       <i className="fas fa-table"></i>
                       <span>Job Orders</span>
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/adminreservationrecords">
+                      <i className="fas fa-table"></i>
+                      <span>Reservations Record</span>
                     </a>
                   </li>
                   <li className="nav-item">

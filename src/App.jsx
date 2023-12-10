@@ -25,6 +25,8 @@ import AdminAddEmployee from "./pagesAdmin/AdminAddEmployee";
 import AdminEmployeeList from "./pagesAdmin/AdminEmployeeList";
 import AdminReservationList from "./pagesAdmin/AdminReservationList";
 import AdminJobOrderList from "./pagesAdmin/AdminJobOrderList";
+import AdminUserList from "./pagesAdmin/AdminUserList";
+import AdminAllReservations from "./pagesAdmin/AdminAllReservations";
 
 const router = createBrowserRouter([
   {
@@ -130,6 +132,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/adminusers",
+    element: (
+      <>
+        <AdminUserList />
+      </>
+    ),
+  },
+  {
     path: "/adminreservations",
     element: (
       <>
@@ -142,6 +152,14 @@ const router = createBrowserRouter([
     element: (
       <>
         <AdminJobOrderList />
+      </>
+    ),
+  },
+  {
+    path: "/adminreservationrecords",
+    element: (
+      <>
+        <AdminAllReservations />
       </>
     ),
   },

@@ -206,8 +206,46 @@ router.get('/employee/data', (req, res) => {
   });
 });
 
+router.delete('/users/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+  db.query('DELETE FROM tb_users WHERE user_id = ?', [userId], (error, results, fields) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error deleting user from database' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  });
+});
+
+router.delete('/employee/:employeeId', (req, res) => {
+  const employeeId = req.params.employeeId;
+
+  db.query('DELETE FROM tb_employee WHERE employee_id = ?', [employeeId], (error, results, fields) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error deleting user from database' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  });
+});
+
+router.get('/user/data', (req, res) => {
+  db.query("SELECT * FROM tb_users WHERE usertype='user'", (error, results) => {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
 router.get('/reservation/data', (req, res) => {
-  db.query("SELECT * FROM tb_reservations", (error, results) => {
+  db.query("SELECT * FROM tb_reservations ORDER BY reservation_id DESC", (error, results) => {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
+router.get('/reservation/data/pending', (req, res) => {
+  db.query("SELECT * FROM tb_reservations WHERE status='pending'", (error, results) => {
     if (error) throw error;
     res.json(results);
   });
@@ -215,17 +253,20 @@ router.get('/reservation/data', (req, res) => {
 
 router.post('/reservation/data/update', (req, res) => {
   const updatedData = req.body.updatedData;
+  let successfulUpdates = 0;
+
   updatedData.forEach(reservation => {
     const { reservation_id, status } = reservation;
     const query = `UPDATE tb_reservations SET status = ?, date_updated = NOW() WHERE reservation_id = ?`;
-
     db.query(query, [status, reservation_id], (err, result) => {
       if (err) {
         console.error('Error updating reservation in MySQL:', err);
-        res.status(500).send('Internal Server Error');
       } else {
         console.log('Reservation updated successfully');
-        res.status(200).send('Reservation updated successfully');
+        successfulUpdates++;
+      }
+      if (successfulUpdates === updatedData.length) {
+        res.status(200).send('All reservations updated successfully');
       }
     });
   });
