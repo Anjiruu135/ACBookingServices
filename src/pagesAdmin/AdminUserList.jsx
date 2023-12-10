@@ -138,10 +138,10 @@ function AdminUserList() {
                   </div>
                 </nav>
                 <div className="container-fluid">
-                  <h3 className="text-dark mb-4">Employee List</h3>
+                  <h3 className="text-dark mb-4">User List</h3>
                   <div className="card shadow">
                     <div className="card-header py-3">
-                      <p className="fw-bold text-primary m-0">Employee Info</p>
+                      <p className="fw-bold text-primary m-0">user Info</p>
                     </div>
                     <div className="card-body">
                       <div className="row">

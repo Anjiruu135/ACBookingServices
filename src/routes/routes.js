@@ -355,4 +355,52 @@ router.get("/admin/logout", (req, res) => {
   return res.json({ Status: "Success" });
 });
 
+router.get('/api/usercount', (req, res) => {
+  const query = 'SELECT COUNT(*) AS usercount FROM tb_users';
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error('Error executing query:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ usercount: results[0].usercount });
+    }
+  });
+});
+
+router.get('/api/employeecount', (req, res) => {
+  const query = 'SELECT COUNT(*) AS employeecount FROM tb_employee';
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error('Error executing query:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ employeecount: results[0].employeecount });
+    }
+  });
+});
+
+router.get('/api/pendingreservations', (req, res) => {
+  const query = 'SELECT COUNT(*) AS pendingreservations FROM tb_reservations WHERE status="Pending"';
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error('Error executing query:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ pendingreservations: results[0].pendingreservations });
+    }
+  });
+});
+
+router.get('/api/totalreservations', (req, res) => {
+  const query = 'SELECT COUNT(*) AS totalreservations FROM tb_reservations';
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error('Error executing query:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ totalreservations: results[0].totalreservations });
+    }
+  });
+});
+
 export default router;

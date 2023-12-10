@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
-import axios from 'axios';
+import axios from "axios";
 
 function AdminAddEmployee() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
   const [formData, setFormData] = useState({
-    fullname: '',
-    phone: '',
-    email: '',
+    fullname: "",
+    phone: "",
+    email: "",
   });
 
   const handleChange = (e) => {
@@ -18,11 +18,14 @@ function AdminAddEmployee() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/addemployee', formData);
+      const response = await axios.post(
+        "http://localhost:3001/addemployee",
+        formData
+      );
       alert(response.data);
       console.log(response.data);
     } catch (error) {
-      console.error('Error submission:', error.message);
+      console.error("Error submission:", error.message);
     }
   };
   return (
@@ -32,7 +35,7 @@ function AdminAddEmployee() {
           <div id="wrapper">
             <nav
               className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
-              style={{ height: "850px", marginBottom: "-50px"}}
+              style={{ height: "850px", marginBottom: "-50px" }}
             >
               <div className="container-fluid p-0">
                 <a
@@ -103,13 +106,6 @@ function AdminAddEmployee() {
               <div id="content">
                 <nav className="bg-white navbar navbar-expand shadow mb-4 topbar static-top navbar-light">
                   <div className="container-fluid">
-                    <button
-                      className="btn btn-link d-md-none rounded-circle me-3"
-                      id="sidebarToggleTop"
-                      type="button"
-                    >
-                      <i className="fas fa-bars"></i>
-                    </button>
                     <ul className="navbar-nav flex-nowrap ms-auto">
                       <div className="d-none d-sm-block topbar-divider"></div>
                       <li className="nav-item dropdown no-arrow">
@@ -176,9 +172,7 @@ function AdminAddEmployee() {
                               </div>
                               <div className="col">
                                 <div className="mb-3">
-                                  <label
-                                    className="form-label form-label"
-                                  >
+                                  <label className="form-label form-label">
                                     <strong>Email Address</strong>
                                   </label>
                                   <input
@@ -201,61 +195,6 @@ function AdminAddEmployee() {
                               </button>
                             </div>
                           </form>
-                        </div>
-                      </div>
-                      <div className="card shadow">
-                        <div className="card-header py-3"></div>
-                        <div className="card-body">
-                          <form>
-                            <div className="mb-3"></div>
-                            <div className="mb-3"></div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-8">
-                      <div className="row d-none mb-3">
-                        <div className="col">
-                          <div className="card text-white bg-primary shadow">
-                            <div className="card-body">
-                              <div className="row mb-2">
-                                <div className="col">
-                                  <p className="m-0">Peformance</p>
-                                  <p className="m-0">
-                                    <strong>65.2%</strong>
-                                  </p>
-                                </div>
-                                <div className="col-auto">
-                                  <i className="fas fa-rocket fa-2x"></i>
-                                </div>
-                              </div>
-                              <p className="text-white-50 small m-0">
-                                <i className="fas fa-arrow-up"></i>&nbsp;5%
-                                since last month
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col">
-                          <div className="card text-white bg-success shadow">
-                            <div className="card-body">
-                              <div className="row mb-2">
-                                <div className="col">
-                                  <p className="m-0">Peformance</p>
-                                  <p className="m-0">
-                                    <strong>65.2%</strong>
-                                  </p>
-                                </div>
-                                <div className="col-auto">
-                                  <i className="fas fa-rocket fa-2x"></i>
-                                </div>
-                              </div>
-                              <p className="text-white-50 small m-0">
-                                <i className="fas fa-arrow-up"></i>&nbsp;5%
-                                since last month
-                              </p>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>

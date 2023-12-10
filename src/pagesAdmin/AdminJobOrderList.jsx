@@ -111,13 +111,6 @@ function AdminJobOrderList() {
               <div id="content">
                 <nav className="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
                   <div className="container-fluid">
-                    <button
-                      className="btn btn-link d-md-none rounded-circle me-3"
-                      id="sidebarToggleTop"
-                      type="button"
-                    >
-                      <i className="fas fa-bars"></i>
-                    </button>
                     <ul className="navbar-nav flex-nowrap ms-auto">
                       <div className="d-none d-sm-block topbar-divider"></div>
                       <li className="nav-item dropdown no-arrow">
@@ -138,10 +131,10 @@ function AdminJobOrderList() {
                   </div>
                 </nav>
                 <div className="container-fluid">
-                  <h3 className="text-dark mb-4">Employee List</h3>
+                  <h3 className="text-dark mb-4">Job Orders</h3>
                   <div className="card shadow">
                     <div className="card-header py-3">
-                      <p className="fw-bold text-primary m-0">Employee Info</p>
+                      <p className="fw-bold text-primary m-0">Job Order Info</p>
                     </div>
                     <div className="card-body">
                       <div className="row">

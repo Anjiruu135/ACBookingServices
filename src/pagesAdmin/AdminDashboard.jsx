@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
+import axios from "axios";
 
 function AdminDashboard() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
+  const [userData, setUserData] = useState(0);
+  const [employeeData, setEmployeeData] = useState(0);
+  const [pendingReservations, setPendingReservations] = useState(0);
+  const [totalReservations, setTotalReservations] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userCountResponse = await axios.get('http://localhost:3001/api/usercount');
+        const employeeCountResponse = await axios.get('http://localhost:3001/api/employeecount');
+        const pendingReservationsResponse = await axios.get('http://localhost:3001/api/pendingreservations');
+        const totalReservationsResponse = await axios.get('http://localhost:3001/api/totalreservations');
+
+        setUserData(userCountResponse.data.usercount);
+        setEmployeeData(employeeCountResponse.data.employeecount);
+        setPendingReservations(pendingReservationsResponse.data.pendingreservations);
+        setTotalReservations(totalReservationsResponse.data.totalreservations);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       {authAdmin ? (
@@ -119,10 +145,10 @@ function AdminDashboard() {
                           <div className="row align-items-center no-gutters">
                             <div className="col me-2">
                               <div className="text-uppercase fw-bold text-primary text-xs mb-1">
-                                <span>Earnings (monthly)</span>
+                                <span>Number of Users: </span>
                               </div>
                               <div className="fw-bold text-dark h5 mb-0">
-                                <span>$40,000</span>
+                                <span>{userData}</span>
                               </div>
                             </div>
                             <div className="col-auto">
@@ -138,10 +164,10 @@ function AdminDashboard() {
                           <div className="row align-items-center no-gutters">
                             <div className="col me-2">
                               <div className="text-uppercase fw-bold text-success text-xs mb-1">
-                                <span>Earnings (annual)</span>
+                                <span>Number of Employees:</span>
                               </div>
                               <div className="fw-bold text-dark h5 mb-0">
-                                <span>$215,000</span>
+                                <span>{employeeData}</span>
                               </div>
                             </div>
                             <div className="col-auto">
@@ -157,27 +183,12 @@ function AdminDashboard() {
                           <div className="row align-items-center no-gutters">
                             <div className="col me-2">
                               <div className="text-uppercase fw-bold text-info text-xs mb-1">
-                                <span>Tasks</span>
+                                <span>Pending Reservations: </span>
                               </div>
                               <div className="row g-0 align-items-center">
                                 <div className="col-auto">
                                   <div className="fw-bold text-dark h5 mb-0 me-3">
-                                    <span>50%</span>
-                                  </div>
-                                </div>
-                                <div className="col">
-                                  <div className="progress progress-sm">
-                                    <div
-                                      className="progress-bar bg-info"
-                                      aria-valuenow="50"
-                                      aria-valuemin="0"
-                                      aria-valuemax="100"
-                                      style={{ width: "50%" }}
-                                    >
-                                      <span className="visually-hidden">
-                                        50%
-                                      </span>
-                                    </div>
+                                    <span>{pendingReservations}</span>
                                   </div>
                                 </div>
                               </div>
@@ -195,10 +206,10 @@ function AdminDashboard() {
                           <div className="row align-items-center no-gutters">
                             <div className="col me-2">
                               <div className="text-uppercase fw-bold text-warning text-xs mb-1">
-                                <span>Pending Requests</span>
+                                <span>Total Reservations: </span>
                               </div>
                               <div className="fw-bold text-dark h5 mb-0">
-                                <span>18</span>
+                                <span>{totalReservations}</span>
                               </div>
                             </div>
                             <div className="col-auto">
@@ -215,48 +226,42 @@ function AdminDashboard() {
                         <div className="col-lg-6 mb-4">
                           <div className="card text-white bg-primary shadow">
                             <div className="card-body">
-                              <p className="m-0">Primary</p>
-                              <p className="text-white-50 small m-0">#4e73df</p>
+                              <p className="m-0">Data 1</p>
                             </div>
                           </div>
                         </div>
                         <div className="col-lg-6 mb-4">
                           <div className="card text-white bg-success shadow">
                             <div className="card-body">
-                              <p className="m-0">Success</p>
-                              <p className="text-white-50 small m-0">#1cc88a</p>
+                              <p className="m-0">Data 2</p>
                             </div>
                           </div>
                         </div>
                         <div className="col-lg-6 mb-4">
                           <div className="card text-white bg-info shadow">
                             <div className="card-body">
-                              <p className="m-0">Info</p>
-                              <p className="text-white-50 small m-0">#36b9cc</p>
+                              <p className="m-0">Data 3</p>
                             </div>
                           </div>
                         </div>
                         <div className="col-lg-6 mb-4">
                           <div className="card text-white bg-warning shadow">
                             <div className="card-body">
-                              <p className="m-0">Warning</p>
-                              <p className="text-white-50 small m-0">#f6c23e</p>
+                              <p className="m-0">Data 4</p>
                             </div>
                           </div>
                         </div>
                         <div className="col-lg-6 mb-4">
                           <div className="card text-white bg-danger shadow">
                             <div className="card-body">
-                              <p className="m-0">Danger</p>
-                              <p className="text-white-50 small m-0">#e74a3b</p>
+                              <p className="m-0">Data 5</p>
                             </div>
                           </div>
                         </div>
                         <div className="col-lg-6 mb-4">
                           <div className="card text-white bg-secondary shadow">
                             <div className="card-body">
-                              <p className="m-0">Secondary</p>
-                              <p className="text-white-50 small m-0">#858796</p>
+                              <p className="m-0">Data 6</p>
                             </div>
                           </div>
                         </div>
