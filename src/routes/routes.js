@@ -80,12 +80,10 @@ router.post("/login", (req, res) => {
             res.cookie("token", token);
             console.log(username);
             console.log(usertype);
-            res
-              .status(200)
-              .send({
-                usertype: usertype,
-                message: "Login successful for user",
-              });
+            res.status(200).send({
+              usertype: usertype,
+              message: "Login successful for user",
+            });
           } else if (usertype === "admin") {
             const admintoken = jwt.sign(
               { user_id, username, usertype },
@@ -97,12 +95,10 @@ router.post("/login", (req, res) => {
             res.cookie("admintoken", admintoken);
             console.log(username);
             console.log(usertype);
-            res
-              .status(200)
-              .send({
-                usertype: usertype,
-                message: "Login successful for admin",
-              });
+            res.status(200).send({
+              usertype: usertype,
+              message: "Login successful for admin",
+            });
           } else {
             res.status(401).send("Invalid usertype");
           }
@@ -136,7 +132,7 @@ router.post("/inquire", (req, res) => {
             email,
             location,
             message,
-            "pending",
+            "Pending",
           ],
           (insertErr, insertResult) => {
             if (insertErr) {
@@ -199,77 +195,154 @@ router.post("/addemployee", (req, res) => {
   );
 });
 
-router.get('/employee/data', (req, res) => {
+router.get("/employee/data", (req, res) => {
   db.query("SELECT * FROM tb_employee", (error, results) => {
     if (error) throw error;
     res.json(results);
   });
 });
 
-router.delete('/users/:userId', (req, res) => {
+router.delete("/users/:userId", (req, res) => {
   const userId = req.params.userId;
 
-  db.query('DELETE FROM tb_users WHERE user_id = ?', [userId], (error, results, fields) => {
-    if (error) {
-      return res.status(500).json({ error: 'Error deleting user from database' });
-    }
+  db.query(
+    "DELETE FROM tb_users WHERE user_id = ?",
+    [userId],
+    (error, results, fields) => {
+      if (error) {
+        return res
+          .status(500)
+          .json({ error: "Error deleting user from database" });
+      }
 
-    res.status(200).json({ message: 'User deleted successfully' });
-  });
+      res.status(200).json({ message: "User deleted successfully" });
+    }
+  );
 });
 
-router.delete('/employee/:employeeId', (req, res) => {
+router.delete("/employee/:employeeId", (req, res) => {
   const employeeId = req.params.employeeId;
 
-  db.query('DELETE FROM tb_employee WHERE employee_id = ?', [employeeId], (error, results, fields) => {
-    if (error) {
-      return res.status(500).json({ error: 'Error deleting user from database' });
-    }
+  db.query(
+    "DELETE FROM tb_employee WHERE employee_id = ?",
+    [employeeId],
+    (error, results, fields) => {
+      if (error) {
+        return res
+          .status(500)
+          .json({ error: "Error deleting user from database" });
+      }
 
-    res.status(200).json({ message: 'User deleted successfully' });
-  });
+      res.status(200).json({ message: "User deleted successfully" });
+    }
+  );
 });
 
-router.get('/user/data', (req, res) => {
+router.get("/user/data", (req, res) => {
   db.query("SELECT * FROM tb_users WHERE usertype='user'", (error, results) => {
     if (error) throw error;
     res.json(results);
   });
 });
 
-router.get('/reservation/data', (req, res) => {
-  db.query("SELECT * FROM tb_reservations ORDER BY reservation_id DESC", (error, results) => {
-    if (error) throw error;
-    res.json(results);
+router.get("/reservation/data", (req, res) => {
+  db.query(
+    "SELECT * FROM tb_reservations ORDER BY reservation_id DESC",
+    (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    }
+  );
+});
+
+router.get("/reservation/data/pending", (req, res) => {
+  db.query(
+    "SELECT * FROM tb_reservations WHERE status='Pending'",
+    (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    }
+  );
+});
+
+router.get("/joborder/data", (req, res) => {
+  db.query(
+    "SELECT * FROM tb_joborder",
+    (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    }
+  );
+});
+
+router.post('/joborder/update', (req, res) => {
+  const orderId = req.body.orderId;
+  db.query(`UPDATE tb_joborder SET status = 'Done', Date_updated = NOW() WHERE order_id = ?`, [orderId], (error, results) => {
+    if (error) {
+      console.error('Error updating status:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      console.log('Status updated successfully');
+      res.status(200).json({ success: true });
+    }
   });
 });
 
-router.get('/reservation/data/pending', (req, res) => {
-  db.query("SELECT * FROM tb_reservations WHERE status='pending'", (error, results) => {
-    if (error) throw error;
-    res.json(results);
-  });
-});
-
-router.post('/reservation/data/update', (req, res) => {
+router.post("/reservation/data/update", (req, res) => {
   const updatedData = req.body.updatedData;
   let successfulUpdates = 0;
-
-  updatedData.forEach(reservation => {
-    const { reservation_id, status } = reservation;
-    const query = `UPDATE tb_reservations SET status = ?, date_updated = NOW() WHERE reservation_id = ?`;
-    db.query(query, [status, reservation_id], (err, result) => {
+  db.query(
+    "SELECT COUNT(*) AS orderCount FROM tb_joborder",
+    (err, countResult) => {
       if (err) {
-        console.error('Error updating reservation in MySQL:', err);
-      } else {
-        console.log('Reservation updated successfully');
-        successfulUpdates++;
+        console.error("Error counting rows in tb_joborder:", err);
+        res.status(500).send("Internal Server Error");
+        return;
       }
-      if (successfulUpdates === updatedData.length) {
-        res.status(200).send('All reservations updated successfully');
-      }
-    });
-  });
+
+      const orderCount = countResult[0].orderCount;
+
+      updatedData.forEach((reservation) => {
+        const { reservation_id, status } = reservation;
+        const order_id = orderCount + 1;
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        const query = `UPDATE tb_reservations SET status = ?, date_updated = NOW() WHERE reservation_id = ?`;
+        db.query(query, [status, reservation_id], (err, result) => {
+          if (err) {
+            console.error("Error updating reservation in MySQL:", err);
+          } else {
+            console.log("Reservation updated successfully");
+            successfulUpdates++;
+
+            if (status === "approved") {
+              db.query(
+                "INSERT INTO tb_joborder (order_id, employee_id, reservation_id, date_issued, status) VALUES (?, (SELECT employee_id FROM tb_employee ORDER BY RAND() LIMIT 1), ?, NOW(), 'Ongoing')",
+                [
+                  `JO-${currentYear}-${currentMonth}-${order_id}`,
+                  reservation_id,
+                ],
+                (err, result) => {
+                  if (err) {
+                    console.error(
+                      "Error inserting approval data in MySQL:",
+                      err
+                    );
+                  } else {
+                    console.log("Approval data inserted successfully");
+                  }
+                }
+              );
+            }
+          }
+
+          if (successfulUpdates === updatedData.length) {
+            res.status(200).send("All reservations updated successfully");
+          }
+        });
+      });
+    }
+  );
 });
 
 router.get("/logout", (req, res) => {

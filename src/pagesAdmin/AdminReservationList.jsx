@@ -218,7 +218,7 @@ function AdminReservationList() {
                                       background: "rgb(90,223,78)",
                                       borderStyle: "none",
                                     }}
-                                    onClick={() => handleActionClick(reservation.reservation_id, 'approved')}
+                                    onClick={() => handleActionClick(reservation.reservation_id, 'Approved')}
                                   >
                                     Approve
                                   </button>
@@ -229,7 +229,7 @@ function AdminReservationList() {
                                       borderStyle: "none",
                                       marginLeft: "10px",
                                     }}
-                                    onClick={() => handleActionClick(reservation.reservation_id, 'denied')}
+                                    onClick={() => handleActionClick(reservation.reservation_id, 'Denied')}
                                   >
                                     Deny
                                   </button>

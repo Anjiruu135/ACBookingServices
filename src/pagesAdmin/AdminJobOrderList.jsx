@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
+import axios from "axios";
 
 function AdminJobOrderList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
+  const [joborderData, setJoborderData] = useState([]);
+
+  const getJoborderData = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/joborder/data");
+      setJoborderData(response.data);
+      console.log("Job Order Data:", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getJoborderData();
+  }, []);
+
+  const handleStatusUpdate = (orderId) => {
+    axios.post('http://localhost:3001/joborder/update', { orderId })
+      .then(response => {
+        console.log('Status updated successfully');
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error updating status:', error);
+      });
+  };
+
   return (
     <>
       {authAdmin ? (
@@ -11,7 +39,7 @@ function AdminJobOrderList() {
           <div id="wrapper">
             <nav
               className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
-              style={{ height: "850px", marginBottom: "-50px"}}
+              style={{ height: "850px", marginBottom: "-50px" }}
             >
               <div className="container-fluid p-0">
                 <a
@@ -149,58 +177,48 @@ function AdminJobOrderList() {
                         <table className="table my-0" id="dataTable">
                           <thead>
                             <tr>
-                              <th>Name</th>
-                              <th>Position</th>
-                              <th>Office</th>
-                              <th>Age</th>
-                              <th>Start date</th>
-                              <th>Salary</th>
+                              <th>Job Order ID</th>
+                              <th>Employee ID Assigned</th>
+                              <th>Reservation ID</th>
+                              <th>Date Issued</th>
+                              <th>Status</th>
+                              <th>Date Updated</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>Cedric Kelly</td>
-                              <td>Senior JavaScript Developer</td>
-                              <td>Edinburgh</td>
-                              <td>22</td>
-                              <td>
-                                2012/03/29
-                                <br />
-                              </td>
-                              <td>
-                                <button
-                                  className="btn btn-primary btn-sm"
-                                  style={{
-                                    background: "rgb(223,182,78)",
-                                    borderStyle: "none",
-                                  }}
-                                  type="submit"
-                                >
-                                  Done
-                                </button>
-                              </td>
-                            </tr>
+                            {joborderData.map((joborder) => (
+                              <tr key={joborder.order_id}>
+                                <td>{joborder.order_id}</td>
+                                <td>{joborder.employee_id}</td>
+                                <td>{joborder.reservation_id}</td>
+                                <td>{joborder.date_issued}</td>
+                                <td>{joborder.status}</td>
+                                <td>{joborder.date_updated}</td>
+                                <td>
+                                  <button
+                                    className="btn btn-primary btn-sm"
+                                    style={{
+                                      background: "rgb(223,182,78)",
+                                      borderStyle: "none",
+                                    }}
+                                    onClick={() => handleStatusUpdate(joborder.order_id)}
+                                  >
+                                    Done
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                           <tfoot>
                             <tr>
-                              <td>
-                                <strong>Name</strong>
-                              </td>
-                              <td>
-                                <strong>Position</strong>
-                              </td>
-                              <td>
-                                <strong>Office</strong>
-                              </td>
-                              <td>
-                                <strong>Age</strong>
-                              </td>
-                              <td>
-                                <strong>Start date</strong>
-                              </td>
-                              <td>
-                                <strong>Salary</strong>
-                              </td>
+                              <th>Job Order ID</th>
+                              <th>Employee ID Assigned</th>
+                              <th>Reservation ID</th>
+                              <th>Date Issued</th>
+                              <th>Status</th>
+                              <th>Date Updated</th>
+                              <th>Action</th>
                             </tr>
                           </tfoot>
                         </table>
