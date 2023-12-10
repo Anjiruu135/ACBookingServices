@@ -1,9 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
+import axios from "axios";
 
 function AdminReservationList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
+  const [reservationData, setReservationData] = useState([]);
+
+  const getReservationData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/reservation/data');
+      setReservationData(response.data);
+      console.log('Reservation Data:', response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    getReservationData();
+  }, []);
+
+  const handleActionClick = (reservationId, action) => {
+    const updatedData = reservationData.map((reservation) => {
+      if (reservation.reservation_id === reservationId) {
+        return { ...reservation, status: action };
+      }
+      return reservation;
+    });
+  
+    console.log(updatedData);
+  
+    axios.post('http://localhost:3001/reservation/data/update', { updatedData })
+      .then(response => {
+        console.log(response.data);
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error updating reservation:', error);
+      });
+  };
+
   return (
     <>
       {authAdmin ? (
@@ -11,7 +48,7 @@ function AdminReservationList() {
           <div id="wrapper">
             <nav
               className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
-              style={{ height: "650px" }}
+              style={{ height: "850px", marginBottom: "-50px" }}
             >
               <div className="container-fluid p-0">
                 <a
@@ -42,19 +79,19 @@ function AdminReservationList() {
                   <li className="nav-item">
                     <a className="nav-link" href="/adminemployees">
                       <i className="fas fa-table"></i>
-                      <span>Employee List</span>
+                      <span>Employees</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link active" href="/adminreservations">
                       <i className="fas fa-table"></i>
-                      <span>Reservation List</span>
+                      <span>Pending Reservations</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminjoborders">
                       <i className="fas fa-table"></i>
-                      <span>Job Order List</span>
+                      <span>Job Orders</span>
                     </a>
                   </li>
                   <li className="nav-item">
@@ -91,35 +128,18 @@ function AdminReservationList() {
                               ADMIN
                             </span>
                           </a>
-                          <div className="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Profile
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Settings
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Activity log
-                            </a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Logout
-                            </a>
-                          </div>
                         </div>
                       </li>
                     </ul>
                   </div>
                 </nav>
                 <div className="container-fluid">
-                  <h3 className="text-dark mb-4">Employee List</h3>
+                  <h3 className="text-dark mb-4">Reservations</h3>
                   <div className="card shadow">
                     <div className="card-header py-3">
-                      <p className="fw-bold text-primary m-0">Employee Info</p>
+                      <p className="fw-bold text-primary m-0">
+                        Reservation Info
+                      </p>
                     </div>
                     <div className="card-body">
                       <div className="row">
@@ -155,69 +175,68 @@ function AdminReservationList() {
                         <table className="table my-0" id="dataTable">
                           <thead>
                             <tr>
-                              <th>Name</th>
-                              <th>Position</th>
-                              <th>Office</th>
-                              <th>Age</th>
-                              <th>Start date</th>
-                              <th>Salary</th>
+                              <th>Reservation ID</th>
+                              <th>User ID</th>
+                              <th>Fullname </th>
+                              <th>Phone Number</th>
+                              <th>Email</th>
+                              <th>Location</th>
+                              <th>Message</th>
+                              <th>Date Inquired</th>
+                              <th>Status</th>
+                              <th>Actions</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>Cedric Kelly</td>
-                              <td>Senior JavaScript Developer</td>
-                              <td>Edinburgh</td>
-                              <td>22</td>
-                              <td>
-                                2012/03/29
-                                <br />
-                              </td>
-                              <td>
-                                <button
-                                  className="btn btn-primary btn-sm"
-                                  style={{
-                                    background: "rgb(90,223,78)",
-                                    borderStyle: "none",
-                                  }}
-                                  type="submit"
-                                >
-                                  Approve
-                                </button>
-                                <button
-                                  className="btn btn-primary btn-sm"
-                                  style={{
-                                    background: "rgb(223,78,78)",
-                                    borderStyle: "none",
-                                    marginLeft: "10px",
-                                  }}
-                                  type="submit"
-                                >
-                                  Deny
-                                </button>
-                              </td>
-                            </tr>
+                            {reservationData.map((reservation) => (
+                              <tr key={reservation.reservation_id}>
+                                <td>{reservation.reservation_id}</td>
+                                <td>{reservation.user_id}</td>
+                                <td>{reservation.fullname}</td>
+                                <td>{reservation.phone_number}</td>
+                                <td>{reservation.email}</td>
+                                <td>{reservation.location}</td>
+                                <td>{reservation.message}</td>
+                                <td>{reservation.date_inquired}</td>
+                                <td>{reservation.status}</td>
+                                <td>
+                                  <button
+                                    className="btn btn-primary btn-sm"
+                                    style={{
+                                      background: "rgb(90,223,78)",
+                                      borderStyle: "none",
+                                    }}
+                                    onClick={() => handleActionClick(reservation.reservation_id, 'approved')}
+                                  >
+                                    Approve
+                                  </button>
+                                  <button
+                                    className="btn btn-primary btn-sm"
+                                    style={{
+                                      background: "rgb(223,78,78)",
+                                      borderStyle: "none",
+                                      marginLeft: "10px",
+                                    }}
+                                    onClick={() => handleActionClick(reservation.reservation_id, 'denied')}
+                                  >
+                                    Deny
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                           <tfoot>
                             <tr>
-                              <td>
-                                <strong>Name</strong>
-                              </td>
-                              <td>
-                                <strong>Position</strong>
-                              </td>
-                              <td>
-                                <strong>Office</strong>
-                              </td>
-                              <td>
-                                <strong>Age</strong>
-                              </td>
-                              <td>
-                                <strong>Start date</strong>
-                              </td>
-                              <td>
-                                <strong>Salary</strong>
-                              </td>
+                              <th>Reservation ID</th>
+                              <th>User ID</th>
+                              <th>Fullname </th>
+                              <th>Phone Number</th>
+                              <th>Email</th>
+                              <th>Location</th>
+                              <th>Message</th>
+                              <th>Date Inquired</th>
+                              <th>Status</th>
+                              <th>Actions</th>
                             </tr>
                           </tfoot>
                         </table>

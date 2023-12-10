@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useState } from 'react';
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
+import axios from 'axios';
 
 function AdminAddEmployee() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
+  const [formData, setFormData] = useState({
+    fullname: '',
+    phone: '',
+    email: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3001/addemployee', formData);
+      alert(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error submission:', error.message);
+    }
+  };
   return (
     <>
       {authAdmin ? (
@@ -11,7 +32,7 @@ function AdminAddEmployee() {
           <div id="wrapper">
             <nav
               className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
-              style={{ height: "850px" }}
+              style={{ height: "850px", marginBottom: "-50px"}}
             >
               <div className="container-fluid p-0">
                 <a
@@ -42,19 +63,19 @@ function AdminAddEmployee() {
                   <li className="nav-item">
                     <a className="nav-link" href="/adminemployees">
                       <i className="fas fa-table"></i>
-                      <span>Employee List</span>
+                      <span>Employees</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminreservations">
                       <i className="fas fa-table"></i>
-                      <span>Reservation List</span>
+                      <span>Pending Reservations</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminjoborders">
                       <i className="fas fa-table"></i>
-                      <span>Job Order List</span>
+                      <span>Job Orders</span>
                     </a>
                   </li>
                   <li className="nav-item">
@@ -91,56 +112,35 @@ function AdminAddEmployee() {
                               ADMIN
                             </span>
                           </a>
-                          <div className="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Profile
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Settings
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Activity log
-                            </a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Logout
-                            </a>
-                          </div>
                         </div>
                       </li>
                     </ul>
                   </div>
                 </nav>
                 <div className="container-fluid">
-                  <h3 className="text-dark mb-4">Profile</h3>
+                  <h3 className="text-dark mb-4">Add Employee</h3>
                   <div className="row mb-3">
                     <div className="col-xxl-12">
                       <div className="card shadow mb-3">
                         <div className="card-header py-3">
                           <p className="fw-bold text-primary m-0">
-                            User Settings
+                            Employee Details
                           </p>
                         </div>
                         <div className="card-body">
-                          <form>
+                          <form onSubmit={handleSubmit}>
                             <div className="row">
                               <div className="col">
                                 <div className="mb-3">
-                                  <label
-                                    className="form-label form-label"
-                                    for="username"
-                                  >
+                                  <label className="form-label form-label">
                                     <strong>Fullname</strong>
                                   </label>
                                   <input
                                     className="form-control form-control"
                                     type="text"
-                                    id="fullname"
-                                    name=""
+                                    name="fullname"
+                                    value={formData.fullname}
+                                    onChange={handleChange}
                                     placeholder="Full Name"
                                   />
                                 </div>
@@ -149,17 +149,15 @@ function AdminAddEmployee() {
                             <div className="row">
                               <div className="col">
                                 <div className="mb-3">
-                                  <label
-                                    className="form-label form-label"
-                                    for="first_name"
-                                  >
+                                  <label className="form-label form-label">
                                     <strong>Phone Number</strong>
                                   </label>
                                   <input
                                     className="form-control form-control"
                                     type="text"
-                                    id="phone"
-                                    name=""
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
                                     placeholder="Number"
                                   />
                                 </div>
@@ -168,15 +166,15 @@ function AdminAddEmployee() {
                                 <div className="mb-3">
                                   <label
                                     className="form-label form-label"
-                                    for="last_name"
                                   >
                                     <strong>Email Address</strong>
                                   </label>
                                   <input
                                     className="form-control form-control"
                                     type="text"
-                                    id="email"
-                                    name=""
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     placeholder="Email"
                                   />
                                 </div>
@@ -187,7 +185,7 @@ function AdminAddEmployee() {
                                 className="btn btn-primary btn-sm"
                                 type="submit"
                               >
-                                Save Settings
+                                Add Employee
                               </button>
                             </div>
                           </form>

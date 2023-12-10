@@ -11,7 +11,7 @@ function AdminDashboard() {
           <div id="wrapper">
             <nav
               className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
-              style={{ height: "850px" }}
+              style={{ height: "850px", marginBottom: "-50px"}}
             >
               <div className="container-fluid p-0">
                 <a
@@ -42,19 +42,19 @@ function AdminDashboard() {
                   <li className="nav-item">
                     <a className="nav-link" href="/adminemployees">
                       <i className="fas fa-table"></i>
-                      <span>Employee List</span>
+                      <span>Employees</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminreservations">
                       <i className="fas fa-table"></i>
-                      <span>Reservation List</span>
+                      <span>Peding Reservations</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminjoborders">
                       <i className="fas fa-table"></i>
-                      <span>Job Order List</span>
+                      <span>Job Orders</span>
                     </a>
                   </li>
                   <li className="nav-item">
@@ -91,25 +91,6 @@ function AdminDashboard() {
                               ADMIN
                             </span>
                           </a>
-                          <div className="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Profile
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Settings
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Activity log
-                            </a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="#">
-                              <i className="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
-                              &nbsp;Logout
-                            </a>
-                          </div>
                         </div>
                       </li>
                     </ul>

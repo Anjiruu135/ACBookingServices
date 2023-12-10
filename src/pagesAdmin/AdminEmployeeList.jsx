@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
+import axios from 'axios';
 
 function AdminEmployeeList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
+  const [employeeData, setEmployeeData] = useState([]);
+
+  const getEmployeeData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/employee/data');
+      setEmployeeData(response.data);
+      console.log('Employee Data:', response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    getEmployeeData();
+  }, []);
+
   return (
     <>
       {authAdmin ? (
@@ -11,7 +28,7 @@ function AdminEmployeeList() {
           <div id="wrapper">
             <nav
               className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
-              style={{ height: "850px" }}
+              style={{ height: "850px", marginBottom: "-50px"}}
             >
               <div className="container-fluid p-0">
                 <a
@@ -42,19 +59,19 @@ function AdminEmployeeList() {
                   <li className="nav-item">
                     <a className="nav-link active" href="/adminemployees">
                       <i className="fas fa-table"></i>
-                      <span>Employee List</span>
+                      <span>Employees</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminreservations">
                       <i className="fas fa-table"></i>
-                      <span>Reservation List</span>
+                      <span>Pending Reservations</span>
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/adminjoborders">
                       <i className="fas fa-table"></i>
-                      <span>Job Order List</span>
+                      <span>Job Orders</span>
                     </a>
                   </li>
                   <li className="nav-item">
@@ -78,6 +95,23 @@ function AdminEmployeeList() {
                     >
                       <i className="fas fa-bars"></i>
                     </button>
+                    <ul className="navbar-nav flex-nowrap ms-auto">
+                      <div className="d-none d-sm-block topbar-divider"></div>
+                      <li className="nav-item dropdown no-arrow">
+                        <div className="nav-item dropdown no-arrow">
+                          <a
+                            className="dropdown-toggle nav-link"
+                            aria-expanded="false"
+                            data-bs-toggle="dropdown"
+                            href="#"
+                          >
+                            <span className="d-none d-lg-inline me-2 text-gray-600 small">
+                              ADMIN
+                            </span>
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </nav>
                 <div className="container-fluid">
@@ -120,25 +154,23 @@ function AdminEmployeeList() {
                         <table className="table my-0" id="dataTable">
                           <thead>
                             <tr>
-                              <th>Name</th>
-                              <th>Position</th>
-                              <th>Office</th>
-                              <th>Age</th>
-                              <th>Start date</th>
-                              <th>Salary</th>
+                              <th>Employee ID</th>
+                              <th>Full name</th>
+                              <th>Email</th>
+                              <th>Phone Number</th>
+                              <th>Status</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>Cedric Kelly</td>
-                              <td>Senior JavaScript Developer</td>
-                              <td>Edinburgh</td>
-                              <td>22</td>
-                              <td>
-                                2012/03/29
-                                <br />
-                              </td>
-                              <td>
+                            {employeeData.map((employee) => (
+                              <tr key={employee.employee_id}>
+                                <td>{employee.employee_id}</td>
+                                <td>{employee.fullname}</td>
+                                <td>{employee.email}</td>
+                                <td>{employee.phone_number}</td>
+                                <td>{employee.status}</td>
+                                <td>
                                 <button
                                   className="btn btn-primary btn-sm"
                                   style={{
@@ -150,28 +182,17 @@ function AdminEmployeeList() {
                                   Remove
                                 </button>
                               </td>
-                            </tr>
+                              </tr>
+                            ))}
                           </tbody>
                           <tfoot>
                             <tr>
-                              <td>
-                                <strong>Name</strong>
-                              </td>
-                              <td>
-                                <strong>Position</strong>
-                              </td>
-                              <td>
-                                <strong>Office</strong>
-                              </td>
-                              <td>
-                                <strong>Age</strong>
-                              </td>
-                              <td>
-                                <strong>Start date</strong>
-                              </td>
-                              <td>
-                                <strong>Salary</strong>
-                              </td>
+                            <th>Employee ID</th>
+                              <th>Full name</th>
+                              <th>Email</th>
+                              <th>Phone Number</th>
+                              <th>Status</th>
+                              <th>Action</th>
                             </tr>
                           </tfoot>
                         </table>
