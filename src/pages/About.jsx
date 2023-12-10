@@ -7,7 +7,7 @@ function About() {
   return (
     <>
       {auth ? (
-        <div>
+        <div className="transitionIn">
           <section
             className="about_section layout_padding"
             style={{ paddingTop: "0" }}

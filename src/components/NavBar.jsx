@@ -23,7 +23,7 @@ function NavBar() {
           <div className="header_bottom">
             <div className="container-fluid">
               <nav className="navbar navbar-expand-lg custom_nav-container ">
-                <a className="navbar-brand" href="/home">
+                <a className="navbar-brand-blue" href="/home">
                   <span>AirCon</span>
                 </a>
 

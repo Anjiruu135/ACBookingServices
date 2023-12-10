@@ -217,7 +217,6 @@ function AdminEmployeeList() {
                     </div>
                   </div>
                 </div>
-                <a className="btn btn-info btn-icon-split" role="button"></a>
               </div>
               <footer className="bg-white sticky-footer">
                 <div className="container my-auto">
