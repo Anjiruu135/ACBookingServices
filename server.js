@@ -57,6 +57,31 @@ app.get("/", verifyUser, (req, res) => {
   });
 });
 
+const verifyAdmin = (req, res, next) => {
+  const admintoken = req.cookies.admintoken;
+  if (!admintoken) {
+    return res.json({ Error: "You are not authorized" });
+  } else {
+    jwt.verify(admintoken, "jwt-secret-key-admin", (err, decoded) => {
+      if (err) {
+        return res.json({ Error: "Invalid Token" });
+      } else {
+        req.username = decoded.username;
+        req.user_id = decoded.user_id;
+        next();
+      }
+    });
+  }
+};
+
+app.get("/admin", verifyAdmin, (req, res) => {
+  return res.json({
+    Status: "Success",
+    username: req.username,
+    user_id: req.user_id,
+  });
+});
+
 app.post("/register", (req, res) => {
   const { email, username, phone, password } = req.body;
 
@@ -108,13 +133,31 @@ app.post("/login", (req, res) => {
         res.status(500).send("Error during login");
       } else {
         if (result.length > 0) {
-          const { user_id, username } = result[0];
-          const token = jwt.sign({ user_id, username }, "jwt-secret-key", {
-            expiresIn: "1d",
-          });
-          res.cookie("token", token);
-          console.log(username);
-          res.status(200).send("Login successful");
+          const { user_id, username, usertype } = result[0];
+
+          // Check the usertype
+          if (usertype === 'user') {
+            const token = jwt.sign({ user_id, username, usertype }, "jwt-secret-key", {
+              expiresIn: "1d",
+            });
+            res.cookie("token", token);
+            console.log(username);
+            console.log(usertype);
+            res.status(200).send({ usertype: usertype, message: "Login successful for user" });
+          }
+          
+          else if (usertype === 'admin') {
+            const admintoken = jwt.sign({ user_id, username, usertype }, "jwt-secret-key-admin", {
+              expiresIn: "1d",
+            });
+            res.cookie("admintoken", admintoken);
+            console.log(username);
+            console.log(usertype);
+            res.status(200).send({ usertype: usertype, message: "Login successful for admin" });
+          } else {
+            res.status(401).send("Invalid usertype");
+          }
+
         } else {
           res.status(401).send("Invalid email or password");
         }
@@ -173,6 +216,11 @@ app.post("/inquire", (req, res) => {
 
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
+  return res.json({ Status: "Success" });
+});
+
+app.get("/admin/logout", (req, res) => {
+  res.clearCookie("admintoken");
   return res.json({ Status: "Success" });
 });
 

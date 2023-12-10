@@ -20,6 +20,11 @@ import Contact from "./pages/Contact";
 import Start from "./pages/Start";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AdminDashboard from "./pagesAdmin/AdminDashboard";
+import AdminAddEmployee from "./pagesAdmin/AdminAddEmployee";
+import AdminEmployeeList from "./pagesAdmin/AdminEmployeeList";
+import AdminReservationList from "./pagesAdmin/AdminReservationList";
+import AdminJobOrderList from "./pagesAdmin/AdminJobOrderList";
 
 const router = createBrowserRouter([
   {
@@ -96,6 +101,47 @@ const router = createBrowserRouter([
         <NavBar />
         <NotFound />
         <Footer />
+      </>
+    ),
+  },
+
+  {
+    path: "/admindashboard",
+    element: (
+      <>
+        <AdminDashboard />
+      </>
+    ),
+  },
+  {
+    path: "/adminaddemployee",
+    element: (
+      <>
+        <AdminAddEmployee />
+      </>
+    ),
+  },
+  {
+    path: "/adminemployees",
+    element: (
+      <>
+        <AdminEmployeeList />
+      </>
+    ),
+  },
+  {
+    path: "/adminreservations",
+    element: (
+      <>
+        <AdminReservationList />
+      </>
+    ),
+  },
+  {
+    path: "/adminjoborders",
+    element: (
+      <>
+        <AdminJobOrderList />
       </>
     ),
   },

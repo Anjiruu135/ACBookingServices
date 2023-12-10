@@ -17,9 +17,25 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/login', loginData);
-      alert(response.data);
-      console.log(response.data);
-      window.location.href = '/home';
+      
+      if (response.status === 200) {
+
+        const { usertype, message } = response.data;
+
+        if (message === "Login successful for user") {
+          alert('Login successful for user');
+          window.location.href = '/home';
+        } else if (message === "Login successful for admin") {
+          alert('Login successful for admin');
+          window.location.href = '/admindashboard';
+        } else {
+          alert('Invalid usertype');
+        }
+        
+      } else {
+        alert('Invalid email or password');
+      }
+  
     } catch (error) {
       alert(error.response.data);
       console.error('Error during login:', error.message);
