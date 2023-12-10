@@ -52,11 +52,14 @@ function Home() {
                         Services
                       </h1>
                       <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Qui harum voluptatem adipisci. Quos molestiae saepe
-                        dicta nobis pariatur, tempora iusto, ad possimus soluta
-                        hic praesentium mollitia consequatur beatae, aspernatur
-                        culpa.
+                        AIRCON repair and maintenance services are vital for
+                        preserving the functionality and efficiency of air
+                        conditioning systems in residential and commercial
+                        spaces. Repair services address specific issues, while
+                        maintenance involves regular upkeep measures such as
+                        cleaning and inspections to prevent breakdowns and
+                        enhance overall system performance, contributing to
+                        energy efficiency and cost savings.
                       </p>
                       <a href="">Contact Us</a>
                     </div>
@@ -111,7 +114,7 @@ function Home() {
                       </g>
                     </svg>
                   </div>
-                  <h5 className="name">Improve</h5>
+                  <h5 className="name">COOL UP</h5>
                 </div>
                 <div className="box">
                   <div className="img-box">
@@ -137,13 +140,16 @@ function Home() {
                 <div className="col-lg-5 col-md-6">
                   <div className="detail-box">
                     <h2>About us</h2>
-                    <p>
-                      There are many variations of passages of Lorem Ipsum
-                      available, but the majority have suffered alteration in
-                      some form, by injected humour, or randomisedThere are many
-                      variations of passages of Lorem Ipsum available, but the
-                      majority have suffered alteration in some form, by
-                      injected humour, or randomised
+                    <p className="black-text">
+                      Welcome to AIRCON, your trusted partner for top-notch air
+                      conditioning repair and maintenance services. With a focus
+                      on excellence, our skilled technicians ensure swift and
+                      effective solutions for both residential and commercial
+                      spaces. We prioritize preventive maintenance to extend the
+                      life of your system, enhance efficiency, and save on
+                      energy costs. At AIRCON, your comfort is our commitment.
+                      Choose us for reliable and professional air conditioning
+                      services.
                     </p>
                     <a href="">Read More</a>
                   </div>
@@ -171,12 +177,13 @@ function Home() {
                       We Provide Professional <br />
                       Home Services.
                     </h2>
-                    <p>
-                      randomised words which don't look even slightly
-                      believable. If you are going to use a passage of Lorem
-                      Ipsum, you need to be sure there isn't anything
-                      embarrassing hidden in the middle of text. All randomised
-                      words which don't look even slightly
+                    <p className="black-text">
+                      Welcome to our professional home services, where we
+                      prioritize excellence in every aspect. From repairs to
+                      maintenance, we deliver expert solutions to ensure your
+                      home operates at its best. Trust us for reliable and
+                      professional services that cater to your home's specific
+                      needs.
                     </p>
                     <a href="">Read More</a>
                   </div>
@@ -193,13 +200,13 @@ function Home() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box ">
                     <div className="img-box">
-                      <img src="src/assets/images/s1.png" alt="" />
+                      <img src="src/assets/images/icon-01-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
-                      <h5>Maintenance</h5>
+                      <h5>Diagnostic Services</h5>
                       <p>
-                        when looking at its layout. The point of using Lorem
-                        Ipsum is that it has a more-or-less normal
+                        Identify and troubleshoot issues with air conditioning
+                        units to determine the root cause of malfunctions.
                       </p>
                     </div>
                   </div>
@@ -207,13 +214,14 @@ function Home() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box ">
                     <div className="img-box">
-                      <img src="src/assets/images/s2.png" alt="" />
+                      <img src="src/assets/images/icon-02-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
-                      <h5>Electrical</h5>
+                      <h5>Regular Maintenance Checks</h5>
                       <p>
-                        when looking at its layout. The point of using Lorem
-                        Ipsum is that it has a more-or-less normal
+                        Conduct routine inspections to ensure the proper
+                        functioning of the air conditioning system, preventing
+                        potential problems before they occur.
                       </p>
                     </div>
                   </div>
@@ -221,13 +229,13 @@ function Home() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box ">
                     <div className="img-box">
-                      <img src="src/assets/images/s3.png" alt="" />
+                      <img src="src/assets/images/icon-03-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
-                      <h5>Plumbing</h5>
+                      <h5>Refrigerant Recharge</h5>
                       <p>
-                        when looking at its layout. The point of using Lorem
-                        Ipsum is that it has a more-or-less normal
+                        Recharge or top up refrigerant levels to ensure the
+                        cooling system operates at peak performance.
                       </p>
                     </div>
                   </div>
@@ -252,14 +260,15 @@ function Home() {
                   <img
                     className="card-img-top w-100 d-block fit-cover"
                     style={{ height: "200px" }}
-                    src="src/assets/images/client-2.jpg"
+                    src="src/assets/images/testimonial-1.jpg"
                   />
                   <div className="card-body p-4">
-                    <h4 className="card-title">Lorem libero donec</h4>
+                    <h4 className="card-title">Client 1</h4>
                     <p className="card-text">
-                      Nullam id dolor id nibh ultricies vehicula ut id elit.
-                      Cras justo odio, dapibus ac facilisis in, egestas eget
-                      quam. Donec id elit non mi porta gravida at eget metus.
+                      "Fast and reliable service! Our air conditioner broke down
+                      on a scorching day, and AirCon Pros had it up and running
+                      in no time. Professional and friendly team, highly
+                      recommended!"
                     </p>
                     <div className="d-flex">
                       <div></div>
@@ -272,14 +281,14 @@ function Home() {
                   <img
                     className="card-img-top w-100 d-block fit-cover"
                     style={{ height: "200px" }}
-                    src="src/assets/images/client-1.jpg"
+                    src="src/assets/images/testimonial-2.jpg"
                   />
                   <div className="card-body p-4">
-                    <h4 className="card-title">Lorem libero donec</h4>
+                    <h4 className="card-title">Client 2</h4>
                     <p className="card-text">
-                      Nullam id dolor id nibh ultricies vehicula ut id elit.
-                      Cras justo odio, dapibus ac facilisis in, egestas eget
-                      quam. Donec id elit non mi porta gravida at eget metus.
+                      "Outstanding work! AirCon Masters not only fixed our AC
+                      issues promptly but also provided valuable tips on
+                      maintenance. Courteous and efficient."
                     </p>
                     <div className="d-flex">
                       <div></div>
@@ -292,14 +301,14 @@ function Home() {
                   <img
                     className="card-img-top w-100 d-block fit-cover"
                     style={{ height: "200px" }}
-                    src="src/assets/images/client-2.jpg"
+                    src="src/assets/images/testimonial-3.jpg"
                   />
                   <div className="card-body p-4">
-                    <h4 className="card-title">Lorem libero donec</h4>
+                    <h4 className="card-title">Client 3</h4>
                     <p className="card-text">
-                      Nullam id dolor id nibh ultricies vehicula ut id elit.
-                      Cras justo odio, dapibus ac facilisis in, egestas eget
-                      quam. Donec id elit non mi porta gravida at eget metus.
+                      "Exceptional service experience! AirCon Heroes rescued us
+                      during a heatwave with their quick response and skillful
+                      repairs. Fair pricing."
                     </p>
                   </div>
                 </div>
@@ -314,7 +323,7 @@ function Home() {
               <div className="row">
                 <div className="col-md-6">
                   <form method="post" onSubmit={handleSubmit}>
-                    <div>
+                    <div className="black-text">
                       <input
                         className="form-control"
                         type="text"
@@ -355,8 +364,8 @@ function Home() {
                       />
                     </div>
                     <div>
-                      <input
-                        className="form-control"
+                      <textarea
+                        className="form-control black-text"
                         type="text"
                         placeholder="Message"
                         name="message"

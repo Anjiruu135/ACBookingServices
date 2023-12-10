@@ -1,0 +1,36 @@
+a:link {
+    text-decoration: none;
+}
+
+.black-text {
+    color: rgba(0, 0, 0, 1);
+}
+
+h2 {
+    color: rgba(0, 0, 0, 1);
+}
+
+.card:hover {
+    scale: 110%;
+    transition: 0.3s;
+    color: rgba(0, 0, 0, 1);
+}
+
+input[type=text] {
+    color: rgba(0, 0, 0, 1);
+}
+
+.button5 {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    border: none;
+}
+
+.banner-background-color {
+    background-color: rgba(209, 227, 255, 1);
+}
+
+.banner-blue {
+    color: rgba(3, 85, 204, 1);
+}

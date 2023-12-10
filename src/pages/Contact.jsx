@@ -44,26 +44,28 @@ function Contact() {
             style={{ paddingTop: "0" }}
           >
             <div
-              className="text-white bg-dark border rounded border-0 p-4 p-md-5"
+              className="banner-background-color border rounded border-0 p-4 p-md-5"
               style={{
-                background: "var(--bs-emphasis-color)",
-                height: "250px",
-                opacity: "1",
-                filter: "brightness(100%)",
+                height: "200px",
                 marginBottom: "100px",
               }}
             >
               <h2
-                className="fw-bold text-white mb-3"
+                className="fw-bold mb-3"
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
                   fontSize: "45px",
-                  marginTop: "45px",
-                  color: "rgb(0,0,0)",
+                  marginTop: "15px",
+                  height: "100%",
+                  marginLeft: "325px",
+                  marginRight: "325px",
+                  background:
+                    'url("src/assets/images/professional-img.png") top left / contain no-repeat',
+                  color: "rgba(3, 85, 204, 1)",
                 }}
               >
-                GIVE US A CALL
+                Give Us A Call
               </h2>
             </div>
             <div className="container" style={{ paddingTop: "50px" }}>
@@ -114,8 +116,8 @@ function Contact() {
                       />
                     </div>
                     <div>
-                      <input
-                        className="form-control"
+                      <textarea
+                        className="form-control black-text"
                         type="text"
                         style={{ height: "150px" }}
                         placeholder="Message"

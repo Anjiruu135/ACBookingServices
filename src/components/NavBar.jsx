@@ -14,8 +14,8 @@ function NavBar() {
                   <i className="fa fa-envelope" aria-hidden="true"></i>
                   <span> Welcome, {name} ! </span>
                 </a> 
-                <a href="">
-                  <button onClick={handleLogout}> LOGOUT </button>
+                <a href="" >
+                  <button className="button5" onClick={handleLogout}> LOGOUT </button>
                 </a>
               </div>
             </div>

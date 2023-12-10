@@ -16,10 +16,14 @@ function Start() {
                   </h1>
                   <p>
                     {" "}
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui
-                    harum voluptatem adipisci. Quos molestiae saepe dicta nobis
-                    pariatur, tempora iusto, ad possimus soluta hic praesentium
-                    mollitia consequatur beatae, aspernatur culpa.{" "}
+                    AIRCON repair and maintenance services
+                    are vital for preserving the functionality and efficiency of
+                    air conditioning systems in residential and commercial
+                    spaces. Repair services address specific issues, while
+                    maintenance involves regular upkeep measures such as
+                    cleaning and inspections to prevent breakdowns and enhance
+                    overall system performance, contributing to energy
+                    efficiency and cost savings.{" "}
                   </p>
                   <a href="/login">LOGIN</a>
                   <a href="/register" style={{ marginLeft: "20px" }}>

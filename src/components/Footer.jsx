@@ -16,7 +16,7 @@ function Footer() {
                         <div className="img-box ">
                           <i className="fa fa-map-marker" aria-hidden="true"></i>
                         </div>
-                        <p>Lorem Ipsum is simply dummy text</p>
+                        <p>Barangay Bulatok, Pagadian City</p>
                       </div>
                     </a>
                   </div>
@@ -26,7 +26,7 @@ function Footer() {
                         <div className="img-box ">
                           <i className="fa fa-phone" aria-hidden="true"></i>
                         </div>
-                        <p>+02 1234567890</p>
+                        <p>+6391501254529</p>
                       </div>
                     </a>
                   </div>
@@ -36,7 +36,7 @@ function Footer() {
                         <div className="img-box">
                           <i className="fa fa-envelope" aria-hidden="true"></i>
                         </div>
-                        <p>demo@gmail.com</p>
+                        <p>ACBookingServices@gmail.com</p>
                       </div>
                     </a>
                   </div>
@@ -49,17 +49,9 @@ function Footer() {
           <h4>Follow Us</h4>
           <div className="box">
             <a href="">
-              <i className="fa fa-facebook" aria-hidden="true"></i>
+              @AIRCON_Repair_Maintenance_Services
             </a>
-            <a href="">
-              <i className="fa fa-twitter" aria-hidden="true"></i>
-            </a>
-            <a href="">
-              <i className="fa fa-youtube" aria-hidden="true"></i>
-            </a>
-            <a href="">
-              <i className="fa fa-instagram" aria-hidden="true"></i>
-            </a>
+
           </div>
         </div>
       </section>

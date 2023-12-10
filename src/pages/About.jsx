@@ -13,27 +13,27 @@ function About() {
             style={{ paddingTop: "0" }}
           >
             <div
-              className="text-white bg-dark border rounded border-0 p-4 p-md-5"
+              className="banner-background-color border rounded border-0 p-4 p-md-5"
               style={{
-                background: "var(--bs-emphasis-color)",
-                height: "250px",
-                opacity: "1",
-                filter: "brightness(100%)",
-                borderStyle: "solid",
+                height: "200px",
                 marginBottom: "100px",
               }}
             >
               <h2
-                className="fw-bold text-white mb-3"
+                className="fw-bold mb-3"
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
                   fontSize: "45px",
-                  marginTop: "45px",
-                  color: "rgb(0,0,0)",
+                  marginTop: "15px",
+                  color: "rgba(3, 85, 204, 1)",
+                  height: "100%",
+                  marginLeft: "200px",
+                  marginRight: "200px",
+                  background: 'url("src/assets/images/professional-img.png") top left / contain no-repeat'
                 }}
               >
-                GET TO KNOW MORE ABOUT US
+                Get to Know More About Us
               </h2>
             </div>
             <div className="container" style={{ margintop: "50px" }}>
@@ -41,14 +41,20 @@ function About() {
                 <div className="col-md-6 col-lg-5">
                   <div className="detail-box">
                     <h2> About us </h2>
-                    <p>
+                    <p className="black-text">
                       {" "}
-                      There are many variations of passages of Lorem Ipsum
-                      available, but the majority have suffered alteration in
-                      some form, by injected humour, or randomisedThere are many
-                      variations of passages of Lorem Ipsum available, but the
-                      majority have suffered alteration in some form, by
-                      injected humour, or randomised{" "}
+                      Welcome to AIRCON, your go-to destination for
+                      top-tier air conditioning repair and maintenance services.
+                      Our certified technicians bring expertise to ensure your
+                      cooling systems run seamlessly, providing prompt,
+                      reliable, and cost-effective solutions. From routine
+                      maintenance to emergency repairs, we offer a comprehensive
+                      suite of services designed for your comfort. With a
+                      customer-centric approach, transparent communication, and
+                      a passion for quality, AIRCON is your trusted
+                      partner in maintaining optimal indoor comfort. Choose us
+                      for reliability, affordability, and satisfaction—your
+                      comfort is our priority.{" "}
                     </p>
                     <a href=""> Read More </a>
                   </div>
