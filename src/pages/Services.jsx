@@ -27,10 +27,10 @@ function Services() {
                   fontSize: "45px",
                   marginTop: "15px",
                   height: "100%",
-                  marginLeft: "350px",
-                  marginRight: "350px",
+                  marginLeft: "auto",
+                  marginRight: "auto",
                   background:
-                    'url("src/assets/images/professional-img.png") top left / contain no-repeat',
+                    'url("src/assets/images/professional-img.png") 250px 0px / contain no-repeat',
                   color: "rgba(3, 85, 204, 1)",
                 }}
               >

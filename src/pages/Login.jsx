@@ -48,7 +48,7 @@ function Login() {
         <section className="position-relative py-4 py-xl-5">
           <div className="container">
             <div
-              className="row d-flex justify-content-center"
+              className="row d-flex justify-content-center responsivestart"
               style={{background: 'url("src/assets/images/slider-img.png") top right no-repeat, url("src/assets/images/professional-img.png") top left / contain no-repeat'}}
             >
               <div className="col-md-6 col-xl-4 col-xxl-4">
@@ -57,7 +57,7 @@ function Login() {
                     className="card-body d-flex flex-column align-items-center"
                     style={{paddingTop: '110px',paddingBottom: '160px'}}
                   >
-                    <span style={{marginTop: '-35px'}}> AIRCON LOGIN</span>
+                    <span style={{marginTop: '-35px' , fontWeight: "bold"}}> AIRCON LOGIN</span>
                     <div className="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

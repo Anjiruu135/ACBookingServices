@@ -28,9 +28,9 @@ function About() {
                   marginTop: "15px",
                   color: "rgba(3, 85, 204, 1)",
                   height: "100%",
-                  marginLeft: "200px",
-                  marginRight: "200px",
-                  background: 'url("src/assets/images/professional-img.png") top left / contain no-repeat'
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  background: 'url("src/assets/images/professional-img.png") 250px 0px / contain no-repeat'
                 }}
               >
                 Get to Know More About Us

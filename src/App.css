@@ -48,3 +48,31 @@ div {
         transform: translateX(0);
     }
 }
+
+.textcenter {
+    text-align: center;
+}
+
+.emptypage {
+    margin: 100px 0;
+}
+
+.responsivestart {
+    margin-bottom: -48px;
+}
+
+.picvisible {
+    visibility: visible;
+}
+
+@media only screen and (max-width: 1200px) {
+    .responsivestart {
+        margin-bottom: -24px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .picvisible {
+        visibility: hidden;
+    }
+}

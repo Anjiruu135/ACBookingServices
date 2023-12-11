@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import useAuthentication from "../methods/auth";
 import NotAuthorized from "./NotAuthorized";
 import axios from "axios";
+import { contactSchema } from "../validations/validations.js";
+import * as yup from "yup";
 
 function Home() {
   const { auth, message, name, user_id, handleLogout } = useAuthentication();
@@ -13,6 +15,12 @@ function Home() {
     message: "",
   });
 
+  const [errors, setErrors] = useState({});
+
+  const handleInputFocus = (field) => {
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -20,6 +28,7 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await contactSchema.validate(formData, { abortEarly: false });
       const formDataWithAuth = {
         ...formData,
         user_id: user_id,
@@ -32,7 +41,15 @@ function Home() {
       alert("Submission successful");
       window.location.href = "/home";
     } catch (error) {
-      console.error("Error submission:", error.message);
+      if (error instanceof yup.ValidationError) {
+        const newErrors = {};
+        error.inner.forEach((err) => {
+          newErrors[err.path] = err.message;
+        });
+        setErrors(newErrors);
+      } else {
+        console.error("Error submission:", error.message);
+      }
     }
   };
 
@@ -325,52 +342,67 @@ function Home() {
                   <form method="post" onSubmit={handleSubmit}>
                     <div className="black-text">
                       <input
-                        className="form-control"
+                        className={`form-control ${
+                          errors.fullname ? "is-invalid" : ""
+                        }`}
                         type="text"
                         placeholder="Full Name"
                         name="fullname"
                         value={formData.fullname}
                         onChange={handleChange}
+                        onFocus={() => handleInputFocus("fullname")}
                       />
                     </div>
                     <div>
                       <input
-                        className="form-control"
+                        className={`form-control ${
+                          errors.phone ? "is-invalid" : ""
+                        }`}
                         type="text"
                         placeholder="Phone Number"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
+                        onFocus={() => handleInputFocus("phone")}
                       />
                     </div>
                     <div>
                       <input
-                        className="form-control"
+                        className={`form-control ${
+                          errors.email ? "is-invalid" : ""
+                        }`}
                         type="text"
                         placeholder="Email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
+                        onFocus={() => handleInputFocus("email")}
                       />
                     </div>
                     <div>
                       <input
-                        className="form-control"
+                        className={`form-control ${
+                          errors.location ? "is-invalid" : ""
+                        }`}
                         type="text"
                         placeholder="Location"
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
+                        onFocus={() => handleInputFocus("location")}
                       />
                     </div>
                     <div>
                       <textarea
-                        className="form-control black-text"
+                        className={`form-control ${
+                          errors.message ? "is-invalid" : ""
+                        }`}
                         type="text"
                         placeholder="Message"
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
+                        onFocus={() => handleInputFocus("message")}
                         style={{ height: "150px" }}
                       />
                     </div>
@@ -389,6 +421,7 @@ function Home() {
                       style={{ transform: "translate(-20px)" }}
                     >
                       <img
+                        className="picvisible"
                         style={{
                           width: "80%",
                           height: "150%",
