@@ -267,7 +267,7 @@ router.get("/reservation/data/pending", (req, res) => {
 
 router.get("/joborder/data", (req, res) => {
   db.query(
-    "SELECT * FROM tb_joborder",
+    "SELECT * FROM tb_joborder ORDER BY order_id DESC",
     (error, results) => {
       if (error) throw error;
       res.json(results);
@@ -315,7 +315,7 @@ router.post("/reservation/data/update", (req, res) => {
             console.log("Reservation updated successfully");
             successfulUpdates++;
 
-            if (status === "approved") {
+            if (status === "Approved") {
               db.query(
                 "INSERT INTO tb_joborder (order_id, employee_id, reservation_id, date_issued, status) VALUES (?, (SELECT employee_id FROM tb_employee ORDER BY RAND() LIMIT 1), ?, NOW(), 'Ongoing')",
                 [

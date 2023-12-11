@@ -61,7 +61,7 @@ function Home() {
                         enhance overall system performance, contributing to
                         energy efficiency and cost savings.
                       </p>
-                      <a href="">Contact Us</a>
+                      <a href="/contact">Contact Us</a>
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -151,7 +151,7 @@ function Home() {
                       Choose us for reliable and professional air conditioning
                       services.
                     </p>
-                    <a href="">Read More</a>
+                    <a href="/about">Read More</a>
                   </div>
                 </div>
                 <div className="col-lg-7 col-md-6">
@@ -185,7 +185,7 @@ function Home() {
                       professional services that cater to your home's specific
                       needs.
                     </p>
-                    <a href="">Read More</a>
+                    <a href="/services">Read More</a>
                   </div>
                 </div>
               </div>
@@ -242,7 +242,7 @@ function Home() {
                 </div>
               </div>
               <div className="btn-box">
-                <a href="">View More</a>
+                <a href="/services">View More</a>
               </div>
             </div>
           </section>
