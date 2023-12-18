@@ -267,7 +267,7 @@ router.get("/reservation/data/pending", (req, res) => {
 
 router.get("/joborder/data", (req, res) => {
   db.query(
-    "SELECT * FROM tb_joborder ORDER BY order_id DESC",
+    "SELECT * FROM tb_joborder INNER JOIN tb_employee on tb_employee.employee_id=tb_joborder.employee_id ORDER BY order_id DESC",
     (error, results) => {
       if (error) throw error;
       res.json(results);

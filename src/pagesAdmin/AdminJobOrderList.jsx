@@ -183,7 +183,7 @@ function AdminJobOrderList() {
                             {joborderData.map((joborder) => (
                               <tr key={joborder.order_id}>
                                 <td>{joborder.order_id}</td>
-                                <td>{joborder.employee_id}</td>
+                                <td>{joborder.fullname}</td>
                                 <td>{joborder.reservation_id}</td>
                                 <td>{joborder.date_issued}</td>
                                 <td>{joborder.status}</td>
