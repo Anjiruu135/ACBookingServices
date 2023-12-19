@@ -2,8 +2,3 @@
 from = "/*"
 to = "index.html"
 status = 200
-
-[context.production.environment]
-  PORT = 3001
-  CORS_ORIGIN = "http://localhost:3000"
-  VITE_REACT_APP_API_URL = "http://localhost:3001"
