@@ -613,12 +613,12 @@ router.post("/api/reservation/data/update", (req, res) => {
 });
 
 router.get("/api/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", { sameSite: 'None', secure: true });
   return res.json({ Status: "Success" });
 });
 
 router.get("/api/admin/logout", (req, res) => {
-  res.clearCookie("admintoken");
+  res.clearCookie("admintoken", { sameSite: 'None', secure: true });
   return res.json({ Status: "Success" });
 });
 
