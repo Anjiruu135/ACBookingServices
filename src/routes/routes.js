@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
+// Verifies and gets User info for username display
 router.get("/api", verifyUser, (req, res) => {
   return res.json({
     Status: "Success",
@@ -13,6 +14,7 @@ router.get("/api", verifyUser, (req, res) => {
   });
 });
 
+// Verifies and gets Admin info for username display
 router.get("/api/admin", verifyAdmin, (req, res) => {
   return res.json({
     Status: "Success",
@@ -21,6 +23,7 @@ router.get("/api/admin", verifyAdmin, (req, res) => {
   });
 });
 
+// Register User
 router.post("/api/register", (req, res) => {
   db.getConnection((connErr, connection) => {
     if (connErr) {
@@ -92,7 +95,7 @@ router.post("/api/register", (req, res) => {
   });
 });
 
-
+// Login as User or Admin
 router.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -160,6 +163,7 @@ router.post("/api/login", (req, res) => {
   });
 });
 
+// Inquire or Book for Reservations
 router.post("/api/inquire", (req, res) => {
   const { fullname, phone, email, location, message, user_id } = req.body;
 
@@ -222,6 +226,7 @@ router.post("/api/inquire", (req, res) => {
   });
 });
 
+// Add Employee
 router.post("/api/addemployee", (req, res) => {
   const { fullname, phone, email } = req.body;
 
@@ -281,6 +286,7 @@ router.post("/api/addemployee", (req, res) => {
   });
 });
 
+// Gets all Employee from database
 router.get("/api/employee/data", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -305,6 +311,7 @@ router.get("/api/employee/data", (req, res) => {
   });
 });
 
+// Delete selected User
 router.delete("/api/users/:userId", (req, res) => {
   const userId = req.params.userId;
 
@@ -335,6 +342,7 @@ router.delete("/api/users/:userId", (req, res) => {
   });
 });
 
+// Delete selected Employee
 router.delete("/api/employee/:employeeId", (req, res) => {
   const employeeId = req.params.employeeId;
 
@@ -367,6 +375,7 @@ router.delete("/api/employee/:employeeId", (req, res) => {
   });
 });
 
+// Get all Users from Database
 router.get("/api/user/data", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -394,6 +403,7 @@ router.get("/api/user/data", (req, res) => {
   });
 });
 
+// Get all Reservations from Database
 router.get("/api/reservation/data", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -421,6 +431,7 @@ router.get("/api/reservation/data", (req, res) => {
   });
 });
 
+// Get all Pending Reservations from Database
 router.get("/api/reservation/data/pending", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -448,6 +459,7 @@ router.get("/api/reservation/data/pending", (req, res) => {
   });
 });
 
+// Get all Job Orders from Database
 router.get("/api/joborder/data", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -475,6 +487,7 @@ router.get("/api/joborder/data", (req, res) => {
   });
 });
 
+// Update Job Order if Done
 router.post("/api/joborder/update", (req, res) => {
   const orderId = req.body.orderId;
 
@@ -506,6 +519,7 @@ router.post("/api/joborder/update", (req, res) => {
   });
 });
 
+// Update Reservation if Approved or Denied and add a Job Order if Approved
 router.post("/api/reservation/data/update", (req, res) => {
   const updatedData = req.body.updatedData;
   let successfulUpdates = 0;
@@ -612,16 +626,19 @@ router.post("/api/reservation/data/update", (req, res) => {
   });
 });
 
+// Logout and remove User token
 router.get("/api/logout", (req, res) => {
   res.clearCookie("token", { sameSite: 'None', secure: true });
   return res.json({ Status: "Success" });
 });
 
+// Logout and remove Admin token
 router.get("/api/admin/logout", (req, res) => {
   res.clearCookie("admintoken", { sameSite: 'None', secure: true });
   return res.json({ Status: "Success" });
 });
 
+// Count all Users from Database
 router.get("/api/usercount", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -647,6 +664,7 @@ router.get("/api/usercount", (req, res) => {
   });
 });
 
+// Count all Employees from Database
 router.get("/api/employeecount", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -672,6 +690,7 @@ router.get("/api/employeecount", (req, res) => {
   });
 });
 
+// Count all Pending Reservations from Database
 router.get("/api/pendingreservations", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
@@ -698,6 +717,7 @@ router.get("/api/pendingreservations", (req, res) => {
   });
 });
 
+// Count the Total of Reservations from Database
 router.get("/api/totalreservations", (req, res) => {
   // Get a connection from the pool
   db.getConnection((connErr, connection) => {
