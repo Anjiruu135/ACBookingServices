@@ -3,13 +3,6 @@ from = "/*"
 to = "index.html"
 status = 200
 
-[build]
-  command = "npm run build"
-  functions = "functions"
-
-[dev]
-  framework = "# Not needed for build"
-
 [context.production.environment]
   PORT = 3001
   CORS_ORIGIN = "http://localhost:3000"
