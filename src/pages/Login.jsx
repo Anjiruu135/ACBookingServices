@@ -16,12 +16,17 @@ function Login() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/login`, loginData);
-      
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/api/login`,
+        loginData,
+        {
+          withCredentials: true, // Include this line to send and receive cookies
+        }
+      );
+  
       if (response.status === 200) {
-
         const { usertype, message } = response.data;
-
+  
         if (message === "Login successful for user") {
           alert('Login successful for user');
           window.location.href = '/home';
@@ -31,7 +36,6 @@ function Login() {
         } else {
           alert('Invalid usertype');
         }
-        
       } else {
         alert('Invalid email or password');
       }
