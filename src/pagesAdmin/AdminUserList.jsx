@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 function AdminUserList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
@@ -12,7 +9,7 @@ function AdminUserList() {
 
   const getUserData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/data`);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/user/data`);
       setUserData(response.data);
       console.log("User Data:", response.data);
     } catch (error) {
@@ -25,7 +22,7 @@ function AdminUserList() {
   }, []);
 
   const handleRemoveClick = (userId) => {
-    axios.delete(`${process.env.REACT_APP_API_URL}/users/${userId}`)
+    axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/users/${userId}`)
       .then((response) => {
         console.log(response.data);
         window.location.reload();

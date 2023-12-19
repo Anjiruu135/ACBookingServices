@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { registerSchema } from "../validations/validations.js";
 import * as yup from "yup";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -30,7 +27,7 @@ function Register() {
     try {
       await registerSchema.validate(formData, { abortEarly: false });
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/register`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/register`,
         formData
       );
       alert(response.data);

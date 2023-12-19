@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 function AdminAllReservations() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
@@ -12,7 +9,7 @@ function AdminAllReservations() {
 
   const getReservationData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/reservation/data`); 
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/reservation/data`); 
       setReservationData(response.data);
       console.log('Reservation Data:', response.data);
     } catch (error) {
