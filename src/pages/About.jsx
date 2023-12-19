@@ -30,7 +30,7 @@ function About() {
                   height: "100%",
                   marginLeft: "auto",
                   marginRight: "auto",
-                  background: 'url("src/assets/images/professional-img.png") 250px 0px / contain no-repeat'
+                  background: 'url("images/professional-img.png") 250px 0px / contain no-repeat'
                 }}
               >
                 Get to Know More About Us
@@ -61,7 +61,7 @@ function About() {
                 </div>
                 <div className="col-md-6 col-lg-7">
                   <div className="img-box">
-                    <img src="src/assets/images/service-3.jpg" alt="" />
+                    <img src="images/service-3.jpg" alt="" />
                   </div>
                 </div>
               </div>
