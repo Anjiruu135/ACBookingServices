@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function AdminDashboard() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
@@ -13,10 +16,10 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userCountResponse = await axios.get('http://localhost:3001/api/usercount');
-        const employeeCountResponse = await axios.get('http://localhost:3001/api/employeecount');
-        const pendingReservationsResponse = await axios.get('http://localhost:3001/api/pendingreservations');
-        const totalReservationsResponse = await axios.get('http://localhost:3001/api/totalreservations');
+        const userCountResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/usercount`);
+        const employeeCountResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/employeecount`);
+        const pendingReservationsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/pendingreservations`);
+        const totalReservationsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/totalreservations`);
 
         setUserData(userCountResponse.data.usercount);
         setEmployeeData(employeeCountResponse.data.employeecount);

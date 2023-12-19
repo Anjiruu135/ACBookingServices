@@ -4,6 +4,9 @@ import NotAuthorized from "./NotAuthorized";
 import axios from "axios";
 import { contactSchema } from "../validations/validations.js";
 import * as yup from "yup";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function Contact() {
   const { auth, message, name, user_id, handleLogout } = useAuthentication();
@@ -34,7 +37,7 @@ function Contact() {
         user_id: user_id,
       };
       const response = await axios.post(
-        "http://localhost:3001/inquire",
+        `${process.env.REACT_APP_API_URL}/inquire`,
         formDataWithAuth
       );
       console.log(response);

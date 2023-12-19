@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -16,7 +19,7 @@ function Login() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', loginData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginData);
       
       if (response.status === 200) {
 

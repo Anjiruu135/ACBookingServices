@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from 'axios';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function AdminEmployeeList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
@@ -9,7 +12,7 @@ function AdminEmployeeList() {
 
   const getEmployeeData = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/employee/data');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/employee/data`);
       setEmployeeData(response.data);
       console.log('Employee Data:', response.data);
     } catch (error) {
@@ -22,7 +25,7 @@ function AdminEmployeeList() {
   }, []);
 
   const handleRemoveClick = (employeeId) => {
-    axios.delete(`http://localhost:3001/employee/${employeeId}`)
+    axios.delete(`${process.env.REACT_APP_API_URL}/employee/${employeeId}`)
       .then((response) => {
         console.log(response.data);
         window.location.reload();

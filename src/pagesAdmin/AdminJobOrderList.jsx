@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import useAuthenticationAdmin from "../methods/authAdmin";
 import NotAuthorized from "../pages/NotAuthorized";
 import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function AdminJobOrderList() {
   const { authAdmin, message, name, handleLogout } = useAuthenticationAdmin();
@@ -9,7 +12,7 @@ function AdminJobOrderList() {
 
   const getJoborderData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/joborder/data");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/joborder/data`);
       setJoborderData(response.data);
       console.log("Job Order Data:", response.data);
     } catch (error) {
@@ -22,7 +25,7 @@ function AdminJobOrderList() {
   }, []);
 
   const handleStatusUpdate = (orderId) => {
-    axios.post('http://localhost:3001/joborder/update', { orderId })
+    axios.post(`${process.env.REACT_APP_API_URL}/joborder/update`, { orderId })
       .then(response => {
         console.log('Status updated successfully');
         window.location.reload();
