@@ -126,7 +126,7 @@ router.post("/api/login", (req, res) => {
                   expiresIn: "1d",
                 }
               );
-              res.cookie("token", token);
+              res.cookie("token", token, { sameSite: 'None', secure: true });
               console.log(username);
               console.log(usertype);
               res.status(200).send({
@@ -141,7 +141,7 @@ router.post("/api/login", (req, res) => {
                   expiresIn: "1d",
                 }
               );
-              res.cookie("admintoken", admintoken);
+              res.cookie("admintoken", admintoken, { sameSite: 'None', secure: true });
               console.log(username);
               console.log(usertype);
               res.status(200).send({
