@@ -16,6 +16,7 @@ app.use(
     origin: [process.env.CORS_ORIGIN],
     methods: ["POST", "GET", "DELETE"],
     credentials: true,
+    secure: process.env.NODE_ENV === "production",
   })
 );
 
