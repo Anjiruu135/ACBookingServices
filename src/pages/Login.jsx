@@ -16,7 +16,7 @@ function Login() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/login`, loginData);
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/login`, loginData);
       
       if (response.status === 200) {
 

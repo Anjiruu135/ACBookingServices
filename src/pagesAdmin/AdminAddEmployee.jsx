@@ -19,7 +19,7 @@ function AdminAddEmployee() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/addemployee`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/api/addemployee`,
         formData
       );
       alert(response.data);

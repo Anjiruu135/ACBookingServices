@@ -9,7 +9,7 @@ function AdminReservationList() {
 
   const getReservationData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/reservation/data/pending`);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/reservation/data/pending`);
       setReservationData(response.data);
       console.log('Reservation Data:', response.data);
     } catch (error) {
@@ -31,7 +31,7 @@ function AdminReservationList() {
   
     console.log(updatedData);
   
-    axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/reservation/data/update`, { updatedData })
+    axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/reservation/data/update`, { updatedData })
       .then(response => {
         console.log(response.data);
         window.location.reload();

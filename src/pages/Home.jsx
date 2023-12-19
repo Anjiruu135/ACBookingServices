@@ -34,7 +34,7 @@ function Home() {
         user_id: user_id,
       };
       const response = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/inquire`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/api/inquire`,
         formDataWithAuth
       );
       console.log(response);

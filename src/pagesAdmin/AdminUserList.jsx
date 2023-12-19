@@ -9,7 +9,7 @@ function AdminUserList() {
 
   const getUserData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/user/data`);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/user/data`);
       setUserData(response.data);
       console.log("User Data:", response.data);
     } catch (error) {
@@ -22,7 +22,7 @@ function AdminUserList() {
   }, []);
 
   const handleRemoveClick = (userId) => {
-    axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/users/${userId}`)
+    axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/api/users/${userId}`)
       .then((response) => {
         console.log(response.data);
         window.location.reload();

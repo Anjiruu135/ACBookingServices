@@ -9,7 +9,7 @@ function AdminEmployeeList() {
 
   const getEmployeeData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/employee/data`);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/employee/data`);
       setEmployeeData(response.data);
       console.log('Employee Data:', response.data);
     } catch (error) {
@@ -22,7 +22,7 @@ function AdminEmployeeList() {
   }, []);
 
   const handleRemoveClick = (employeeId) => {
-    axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/employee/${employeeId}`)
+    axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/api/employee/${employeeId}`)
       .then((response) => {
         console.log(response.data);
         window.location.reload();

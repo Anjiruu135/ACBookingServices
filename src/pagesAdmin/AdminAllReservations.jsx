@@ -9,7 +9,7 @@ function AdminAllReservations() {
 
   const getReservationData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/reservation/data`); 
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/reservation/data`); 
       setReservationData(response.data);
       console.log('Reservation Data:', response.data);
     } catch (error) {

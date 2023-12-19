@@ -27,7 +27,7 @@ function Register() {
     try {
       await registerSchema.validate(formData, { abortEarly: false });
       const response = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/register`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/api/register`,
         formData
       );
       alert(response.data);

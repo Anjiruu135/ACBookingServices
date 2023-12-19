@@ -11,7 +11,7 @@ const useAuthentication = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_REACT_APP_API_URL}`)
+      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/api`)
       .then((res) => {
         if (res.data.Status === "Success") {
           setAuth(true);
@@ -28,7 +28,7 @@ const useAuthentication = () => {
 
   const handleLogout = () => {
     axios
-      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/logout`)
+      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/logout`)
       .then((res) => {
         window.location.href = "/login";
       })

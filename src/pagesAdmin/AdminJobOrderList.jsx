@@ -9,7 +9,7 @@ function AdminJobOrderList() {
 
   const getJoborderData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/joborder/data`);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/joborder/data`);
       setJoborderData(response.data);
       console.log("Job Order Data:", response.data);
     } catch (error) {
@@ -22,7 +22,7 @@ function AdminJobOrderList() {
   }, []);
 
   const handleStatusUpdate = (orderId) => {
-    axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/joborder/update`, { orderId })
+    axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/joborder/update`, { orderId })
       .then(response => {
         console.log('Status updated successfully');
         window.location.reload();

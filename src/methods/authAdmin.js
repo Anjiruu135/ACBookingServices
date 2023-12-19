@@ -11,7 +11,7 @@ const useAuthenticationAdmin = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/admin`)
+      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/admin`)
       .then((res) => {
         if (res.data.Status === "Success") {
           setAuth(true);
@@ -28,7 +28,7 @@ const useAuthenticationAdmin = () => {
 
   const handleLogout = () => {
     axios
-      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/admin/logout`)
+      .get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/admin/logout`)
       .then((res) => {
         window.location.href = "/login";
       })

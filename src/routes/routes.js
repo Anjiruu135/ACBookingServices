@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-router.get("/", verifyUser, (req, res) => {
+router.get("/api", verifyUser, (req, res) => {
   return res.json({
     Status: "Success",
     username: req.username,
@@ -13,7 +13,7 @@ router.get("/", verifyUser, (req, res) => {
   });
 });
 
-router.get("/admin", verifyAdmin, (req, res) => {
+router.get("/api/admin", verifyAdmin, (req, res) => {
   return res.json({
     Status: "Success",
     username: req.username,
@@ -21,7 +21,7 @@ router.get("/admin", verifyAdmin, (req, res) => {
   });
 });
 
-router.post("/register", (req, res) => {
+router.post("/api/register", (req, res) => {
   const { email, username, phone, password } = req.body;
   db.query(
     "SELECT COUNT(*) as userCount FROM tb_users",
@@ -57,7 +57,7 @@ router.post("/register", (req, res) => {
   );
 });
 
-router.post("/login", (req, res) => {
+router.post("/api/login", (req, res) => {
   const { email, password } = req.body;
   db.query(
     "SELECT * FROM tb_users WHERE email = ? AND password = ?",
@@ -110,7 +110,7 @@ router.post("/login", (req, res) => {
   );
 });
 
-router.post("/inquire", (req, res) => {
+router.post("/api/inquire", (req, res) => {
   const { fullname, phone, email, location, message, user_id } = req.body;
   db.query(
     "SELECT COUNT(*) as reservationCount FROM tb_reservations",
@@ -154,7 +154,7 @@ router.post("/inquire", (req, res) => {
   );
 });
 
-router.post("/addemployee", (req, res) => {
+router.post("/api/addemployee", (req, res) => {
   const { fullname, phone, email } = req.body;
   db.query(
     "SELECT COUNT(*) as employeeCount FROM tb_employee",
@@ -195,14 +195,14 @@ router.post("/addemployee", (req, res) => {
   );
 });
 
-router.get("/employee/data", (req, res) => {
+router.get("/api/employee/data", (req, res) => {
   db.query("SELECT * FROM tb_employee", (error, results) => {
     if (error) throw error;
     res.json(results);
   });
 });
 
-router.delete("/users/:userId", (req, res) => {
+router.delete("/api/users/:userId", (req, res) => {
   const userId = req.params.userId;
 
   db.query(
@@ -220,7 +220,7 @@ router.delete("/users/:userId", (req, res) => {
   );
 });
 
-router.delete("/employee/:employeeId", (req, res) => {
+router.delete("/api/employee/:employeeId", (req, res) => {
   const employeeId = req.params.employeeId;
 
   db.query(
@@ -238,14 +238,14 @@ router.delete("/employee/:employeeId", (req, res) => {
   );
 });
 
-router.get("/user/data", (req, res) => {
+router.get("/api/user/data", (req, res) => {
   db.query("SELECT * FROM tb_users WHERE usertype='user'", (error, results) => {
     if (error) throw error;
     res.json(results);
   });
 });
 
-router.get("/reservation/data", (req, res) => {
+router.get("/api/reservation/data", (req, res) => {
   db.query(
     "SELECT * FROM tb_reservations ORDER BY reservation_id DESC",
     (error, results) => {
@@ -255,7 +255,7 @@ router.get("/reservation/data", (req, res) => {
   );
 });
 
-router.get("/reservation/data/pending", (req, res) => {
+router.get("/api/reservation/data/pending", (req, res) => {
   db.query(
     "SELECT * FROM tb_reservations WHERE status='Pending'",
     (error, results) => {
@@ -265,7 +265,7 @@ router.get("/reservation/data/pending", (req, res) => {
   );
 });
 
-router.get("/joborder/data", (req, res) => {
+router.get("/api/joborder/data", (req, res) => {
   db.query(
     "SELECT * FROM tb_joborder INNER JOIN tb_employee on tb_employee.employee_id=tb_joborder.employee_id ORDER BY order_id DESC",
     (error, results) => {
@@ -275,7 +275,7 @@ router.get("/joborder/data", (req, res) => {
   );
 });
 
-router.post('/joborder/update', (req, res) => {
+router.post('/api/joborder/update', (req, res) => {
   const orderId = req.body.orderId;
   db.query(`UPDATE tb_joborder SET status = 'Done', Date_updated = NOW() WHERE order_id = ?`, [orderId], (error, results) => {
     if (error) {
@@ -288,7 +288,7 @@ router.post('/joborder/update', (req, res) => {
   });
 });
 
-router.post("/reservation/data/update", (req, res) => {
+router.post("/api/reservation/data/update", (req, res) => {
   const updatedData = req.body.updatedData;
   let successfulUpdates = 0;
   db.query(
@@ -345,12 +345,12 @@ router.post("/reservation/data/update", (req, res) => {
   );
 });
 
-router.get("/logout", (req, res) => {
+router.get("/api/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: "Success" });
 });
 
-router.get("/admin/logout", (req, res) => {
+router.get("/api/admin/logout", (req, res) => {
   res.clearCookie("admintoken");
   return res.json({ Status: "Success" });
 });
