@@ -13,7 +13,7 @@ const registerSchema = yup.object().shape({
 
 const contactSchema = yup.object().shape({
     fullname: yup.string().required(),
-    phone: yup.string().required(),
+    phone: yup.string().matches(/^[0-9]+$/, 'Must be numerical').required(),
     email: yup.string().email().required(),
     location: yup.string().required(),
     message: yup.string().required(),

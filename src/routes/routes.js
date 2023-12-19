@@ -22,327 +22,594 @@ router.get("/api/admin", verifyAdmin, (req, res) => {
 });
 
 router.post("/api/register", (req, res) => {
-  const { email, username, phone, password } = req.body;
-  db.query(
-    "SELECT COUNT(*) as userCount FROM tb_users",
-    (countErr, countResult) => {
-      if (countErr) {
-        console.log(countErr);
-        res.status(500).send("Error fetching user count");
-      } else {
-        const userCount = countResult[0].userCount;
-        db.query(
-          "INSERT INTO tb_users (user_id, email, username, phone_number, password, usertype) VALUES (?, ?, ?, ?, ?, ?)",
-          [
-            `${new Date().getFullYear()}-${userCount + 1}`,
-            email,
-            username,
-            phone,
-            password,
-            `user`,
-          ],
-          (insertErr, insertResult) => {
-            if (insertErr) {
-              console.log(insertErr);
-              res.status(500).send("Error registering user");
-            } else {
-              res
-                .status(200)
-                .send(`User registered successfully with ID: ${userCount + 1}`);
-            }
-          }
-        );
-      }
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log(connErr);
+      res.status(500).send("Error establishing database connection");
+      return;
     }
-  );
+
+    const { email, username, phone, password } = req.body;
+
+    // Check if the email already exists
+    connection.query(
+      "SELECT COUNT(*) as emailCount FROM tb_users WHERE email = ?",
+      [email],
+      (emailCheckErr, emailCheckResult) => {
+        if (emailCheckErr) {
+          console.log(emailCheckErr);
+          connection.release();
+          res.status(500).send("Error checking email existence");
+        } else {
+          const emailCount = emailCheckResult[0].emailCount;
+
+          if (emailCount > 0) {
+            // Email already exists, send alert
+            connection.release();
+            res.status(400).send("Email already exists. Please choose a different email.");
+          } else {
+            // Email doesn't exist, proceed with user registration
+            connection.query(
+              "SELECT COUNT(*) as userCount FROM tb_users",
+              (countErr, countResult) => {
+                if (countErr) {
+                  console.log(countErr);
+                  connection.release();
+                  res.status(500).send("Error fetching user count");
+                } else {
+                  const userCount = countResult[0].userCount;
+
+                  connection.query(
+                    "INSERT INTO tb_users (user_id, email, username, phone_number, password, usertype) VALUES (?, ?, ?, ?, ?, ?)",
+                    [
+                      `${new Date().getFullYear()}-${userCount + 1}`,
+                      email,
+                      username,
+                      phone,
+                      password,
+                      `user`,
+                    ],
+                    (insertErr, insertResult) => {
+                      connection.release();
+
+                      if (insertErr) {
+                        console.log(insertErr);
+                        res.status(500).send("Error registering user");
+                      } else {
+                        res
+                          .status(200)
+                          .send(`User registered successfully with ID: ${userCount + 1}`);
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+        }
+      }
+    );
+  });
 });
+
 
 router.post("/api/login", (req, res) => {
   const { email, password } = req.body;
-  db.query(
-    "SELECT * FROM tb_users WHERE email = ? AND password = ?",
-    [email, password],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error during login");
-      } else {
-        if (result.length > 0) {
-          const { user_id, username, usertype } = result[0];
-          if (usertype === "user") {
-            const token = jwt.sign(
-              { user_id, username, usertype },
-              "jwt-secret-key",
-              {
-                expiresIn: "1d",
-              }
-            );
-            res.cookie("token", token);
-            console.log(username);
-            console.log(usertype);
-            res.status(200).send({
-              usertype: usertype,
-              message: "Login successful for user",
-            });
-          } else if (usertype === "admin") {
-            const admintoken = jwt.sign(
-              { user_id, username, usertype },
-              "jwt-secret-key-admin",
-              {
-                expiresIn: "1d",
-              }
-            );
-            res.cookie("admintoken", admintoken);
-            console.log(username);
-            console.log(usertype);
-            res.status(200).send({
-              usertype: usertype,
-              message: "Login successful for admin",
-            });
-          } else {
-            res.status(401).send("Invalid usertype");
-          }
+
+  // Get a connection from the pool
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.log("Error getting database connection:", err);
+      res.status(500).send("Error during login");
+      return;
+    }
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT * FROM tb_users WHERE email = ? AND password = ?",
+      [email, password],
+      (queryErr, result) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (queryErr) {
+          console.log("Error during query:", queryErr);
+          res.status(500).send("Error during login");
         } else {
-          res.status(401).send("Invalid email or password");
+          if (result.length > 0) {
+            const { user_id, username, usertype } = result[0];
+            if (usertype === "user") {
+              const token = jwt.sign(
+                { user_id, username, usertype },
+                "jwt-secret-key",
+                {
+                  expiresIn: "1d",
+                }
+              );
+              res.cookie("token", token);
+              console.log(username);
+              console.log(usertype);
+              res.status(200).send({
+                usertype: usertype,
+                message: "Login successful for user",
+              });
+            } else if (usertype === "admin") {
+              const admintoken = jwt.sign(
+                { user_id, username, usertype },
+                "jwt-secret-key-admin",
+                {
+                  expiresIn: "1d",
+                }
+              );
+              res.cookie("admintoken", admintoken);
+              console.log(username);
+              console.log(usertype);
+              res.status(200).send({
+                usertype: usertype,
+                message: "Login successful for admin",
+              });
+            } else {
+              res.status(401).send("Invalid usertype");
+            }
+          } else {
+            res.status(401).send("Invalid email or password");
+          }
         }
       }
-    }
-  );
+    );
+  });
 });
 
 router.post("/api/inquire", (req, res) => {
   const { fullname, phone, email, location, message, user_id } = req.body;
-  db.query(
-    "SELECT COUNT(*) as reservationCount FROM tb_reservations",
-    (countErr, countResult) => {
-      if (countErr) {
-        console.log(countErr);
-        res.status(500).send("Error fetching user count");
-      } else {
-        const reservationCount = countResult[0].reservationCount;
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1;
-        db.query(
-          "INSERT INTO tb_reservations (reservation_id, user_id, fullname, phone_number, email, location, message, date_inquired, status) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)",
-          [
-            `R-${currentYear}-${currentMonth}:${reservationCount + 1}`,
-            user_id,
-            fullname,
-            phone,
-            email,
-            location,
-            message,
-            "Pending",
-          ],
-          (insertErr, insertResult) => {
-            if (insertErr) {
-              console.log(insertErr);
-              res.status(500).send("Error submission");
-            } else {
-              res
-                .status(200)
-                .send(
-                  `Submission successful with ID: ${currentYear}-${currentMonth}-${
-                    reservationCount + 1
-                  }`
-                );
-            }
-          }
-        );
-      }
+
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error during inquiry");
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT COUNT(*) as reservationCount FROM tb_reservations",
+      (countErr, countResult) => {
+        if (countErr) {
+          console.log(countErr);
+          // Release the connection back to the pool in case of an error
+          connection.release();
+          res.status(500).send("Error fetching user count");
+        } else {
+          const reservationCount = countResult[0].reservationCount;
+          const currentYear = new Date().getFullYear();
+          const currentMonth = new Date().getMonth() + 1;
+
+          // Execute the insert query
+          connection.query(
+            "INSERT INTO tb_reservations (reservation_id, user_id, fullname, phone_number, email, location, message, date_inquired, status) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)",
+            [
+              `R-${currentYear}-${currentMonth}:${reservationCount + 1}`,
+              user_id,
+              fullname,
+              phone,
+              email,
+              location,
+              message,
+              "Pending",
+            ],
+            (insertErr, insertResult) => {
+              // Release the connection back to the pool after the insert query
+              connection.release();
+
+              if (insertErr) {
+                console.log(insertErr);
+                res.status(500).send("Error submission");
+              } else {
+                res
+                  .status(200)
+                  .send(
+                    `Submission successful with ID: ${currentYear}-${currentMonth}-${
+                      reservationCount + 1
+                    }`
+                  );
+              }
+            }
+          );
+        }
+      }
+    );
+  });
 });
 
 router.post("/api/addemployee", (req, res) => {
   const { fullname, phone, email } = req.body;
-  db.query(
-    "SELECT COUNT(*) as employeeCount FROM tb_employee",
-    (countErr, countResult) => {
-      if (countErr) {
-        console.log(countErr);
-        res.status(500).send("Error fetching user count");
-      } else {
-        const employeeCount = countResult[0].employeeCount;
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1;
-        db.query(
-          "INSERT INTO tb_employee (employee_id, fullname, email, phone_number, status) VALUES (?, ?, ?, ?, ?)",
-          [
-            `E-${currentYear}-${currentMonth}:${employeeCount + 1}`,
-            fullname,
-            email,
-            phone,
-            "available",
-          ],
-          (insertErr, insertResult) => {
-            if (insertErr) {
-              console.log(insertErr);
-              res.status(500).send("Error submission");
-            } else {
-              res
-                .status(200)
-                .send(
-                  `Submission successful with ID: E-${currentYear}-${currentMonth}-${
-                    employeeCount + 1
-                  }`
-                );
-            }
-          }
-        );
-      }
+
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error during employee addition");
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT COUNT(*) as employeeCount FROM tb_employee",
+      (countErr, countResult) => {
+        if (countErr) {
+          console.log(countErr);
+          // Release the connection back to the pool in case of an error
+          connection.release();
+          res.status(500).send("Error fetching user count");
+        } else {
+          const employeeCount = countResult[0].employeeCount;
+          const currentYear = new Date().getFullYear();
+          const currentMonth = new Date().getMonth() + 1;
+
+          // Execute the insert query
+          connection.query(
+            "INSERT INTO tb_employee (employee_id, fullname, email, phone_number, status) VALUES (?, ?, ?, ?, ?)",
+            [
+              `E-${currentYear}-${currentMonth}:${employeeCount + 1}`,
+              fullname,
+              email,
+              phone,
+              "available",
+            ],
+            (insertErr, insertResult) => {
+              // Release the connection back to the pool after the insert query
+              connection.release();
+
+              if (insertErr) {
+                console.log(insertErr);
+                res.status(500).send("Error submission");
+              } else {
+                res
+                  .status(200)
+                  .send(
+                    `Submission successful with ID: E-${currentYear}-${currentMonth}-${
+                      employeeCount + 1
+                    }`
+                  );
+              }
+            }
+          );
+        }
+      }
+    );
+  });
 });
 
 router.get("/api/employee/data", (req, res) => {
-  db.query("SELECT * FROM tb_employee", (error, results) => {
-    if (error) throw error;
-    res.json(results);
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error fetching employee data");
+      return;
+    }
+
+    // Use the connection for querying
+    connection.query("SELECT * FROM tb_employee", (error, results) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.log(error);
+        res.status(500).send("Error fetching employee data");
+      } else {
+        res.json(results);
+      }
+    });
   });
 });
 
 router.delete("/api/users/:userId", (req, res) => {
   const userId = req.params.userId;
 
-  db.query(
-    "DELETE FROM tb_users WHERE user_id = ?",
-    [userId],
-    (error, results, fields) => {
-      if (error) {
-        return res
-          .status(500)
-          .json({ error: "Error deleting user from database" });
-      }
-
-      res.status(200).json({ message: "User deleted successfully" });
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Error deleting user from database" });
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "DELETE FROM tb_users WHERE user_id = ?",
+      [userId],
+      (error, results, fields) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.log(error);
+          res.status(500).json({ error: "Error deleting user from database" });
+        } else {
+          res.status(200).json({ message: "User deleted successfully" });
+        }
+      }
+    );
+  });
 });
 
 router.delete("/api/employee/:employeeId", (req, res) => {
   const employeeId = req.params.employeeId;
 
-  db.query(
-    "DELETE FROM tb_employee WHERE employee_id = ?",
-    [employeeId],
-    (error, results, fields) => {
-      if (error) {
-        return res
-          .status(500)
-          .json({ error: "Error deleting user from database" });
-      }
-
-      res.status(200).json({ message: "User deleted successfully" });
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Error deleting employee from database" });
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "DELETE FROM tb_employee WHERE employee_id = ?",
+      [employeeId],
+      (error, results, fields) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.log(error);
+          res
+            .status(500)
+            .json({ error: "Error deleting employee from database" });
+        } else {
+          res.status(200).json({ message: "Employee deleted successfully" });
+        }
+      }
+    );
+  });
 });
 
 router.get("/api/user/data", (req, res) => {
-  db.query("SELECT * FROM tb_users WHERE usertype='user'", (error, results) => {
-    if (error) throw error;
-    res.json(results);
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error fetching user data");
+      return;
+    }
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT * FROM tb_users WHERE usertype='user'",
+      (error, results) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.log(error);
+          res.status(500).send("Error fetching user data");
+        } else {
+          res.json(results);
+        }
+      }
+    );
   });
 });
 
 router.get("/api/reservation/data", (req, res) => {
-  db.query(
-    "SELECT * FROM tb_reservations ORDER BY reservation_id DESC",
-    (error, results) => {
-      if (error) throw error;
-      res.json(results);
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error fetching reservation data");
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT * FROM tb_reservations ORDER BY reservation_id DESC",
+      (error, results) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.log(error);
+          res.status(500).send("Error fetching reservation data");
+        } else {
+          res.json(results);
+        }
+      }
+    );
+  });
 });
 
 router.get("/api/reservation/data/pending", (req, res) => {
-  db.query(
-    "SELECT * FROM tb_reservations WHERE status='Pending'",
-    (error, results) => {
-      if (error) throw error;
-      res.json(results);
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error fetching pending reservation data");
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT * FROM tb_reservations WHERE status='Pending'",
+      (error, results) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.log(error);
+          res.status(500).send("Error fetching pending reservation data");
+        } else {
+          res.json(results);
+        }
+      }
+    );
+  });
 });
 
 router.get("/api/joborder/data", (req, res) => {
-  db.query(
-    "SELECT * FROM tb_joborder INNER JOIN tb_employee on tb_employee.employee_id=tb_joborder.employee_id ORDER BY order_id DESC",
-    (error, results) => {
-      if (error) throw error;
-      res.json(results);
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Error fetching job order data");
+      return;
     }
-  );
+
+    // Use the connection for querying
+    connection.query(
+      "SELECT * FROM tb_joborder INNER JOIN tb_employee ON tb_employee.employee_id=tb_joborder.employee_id ORDER BY order_id DESC",
+      (error, results) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.log(error);
+          res.status(500).send("Error fetching job order data");
+        } else {
+          res.json(results);
+        }
+      }
+    );
+  });
 });
 
-router.post('/api/joborder/update', (req, res) => {
+router.post("/api/joborder/update", (req, res) => {
   const orderId = req.body.orderId;
-  db.query(`UPDATE tb_joborder SET status = 'Done', Date_updated = NOW() WHERE order_id = ?`, [orderId], (error, results) => {
-    if (error) {
-      console.error('Error updating status:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      console.log('Status updated successfully');
-      res.status(200).json({ success: true });
+
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
     }
+
+    // Use the connection for updating
+    connection.query(
+      "UPDATE tb_joborder SET status = 'Done', Date_updated = NOW() WHERE order_id = ?",
+      [orderId],
+      (error, results) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.error("Error updating status:", error);
+          res.status(500).json({ error: "Internal Server Error" });
+        } else {
+          console.log("Status updated successfully");
+          res.status(200).json({ success: true });
+        }
+      }
+    );
   });
 });
 
 router.post("/api/reservation/data/update", (req, res) => {
   const updatedData = req.body.updatedData;
   let successfulUpdates = 0;
-  db.query(
-    "SELECT COUNT(*) AS orderCount FROM tb_joborder",
-    (err, countResult) => {
-      if (err) {
-        console.error("Error counting rows in tb_joborder:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
 
-      const orderCount = countResult[0].orderCount;
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
 
-      updatedData.forEach((reservation) => {
-        const { reservation_id, status } = reservation;
-        const order_id = orderCount + 1;
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1;
-        const query = `UPDATE tb_reservations SET status = ?, date_updated = NOW() WHERE reservation_id = ?`;
-        db.query(query, [status, reservation_id], (err, result) => {
-          if (err) {
-            console.error("Error updating reservation in MySQL:", err);
-          } else {
-            console.log("Reservation updated successfully");
-            successfulUpdates++;
+    // Use the connection for counting rows in tb_joborder
+    connection.query(
+      "SELECT COUNT(*) AS orderCount FROM tb_joborder",
+      (err, countResult) => {
+        if (err) {
+          console.error("Error counting rows in tb_joborder:", err);
+          // Release the connection back to the pool in case of an error
+          connection.release();
+          res.status(500).send("Internal Server Error");
+          return;
+        }
 
-            if (status === "Approved") {
-              db.query(
-                "INSERT INTO tb_joborder (order_id, employee_id, reservation_id, date_issued, status) VALUES (?, (SELECT employee_id FROM tb_employee ORDER BY RAND() LIMIT 1), ?, NOW(), 'Ongoing')",
-                [
-                  `JO-${currentYear}-${currentMonth}-${order_id}`,
-                  reservation_id,
-                ],
-                (err, result) => {
-                  if (err) {
-                    console.error(
-                      "Error inserting approval data in MySQL:",
-                      err
-                    );
-                  } else {
-                    console.log("Approval data inserted successfully");
+        // Release the connection back to the pool after counting rows
+        connection.release();
+
+        const orderCount = countResult[0].orderCount;
+
+        // Get a new connection from the pool for updating reservations
+        db.getConnection((updateConnErr, updateConnection) => {
+          if (updateConnErr) {
+            console.log("Error getting database connection:", updateConnErr);
+            res.status(500).send("Internal Server Error");
+            return;
+          }
+
+          updatedData.forEach((reservation) => {
+            const { reservation_id, status } = reservation;
+            const order_id = orderCount + 1;
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth() + 1;
+            const query =
+              "UPDATE tb_reservations SET status = ?, date_updated = NOW() WHERE reservation_id = ?";
+
+            // Use the connection for updating reservations
+            updateConnection.query(
+              query,
+              [status, reservation_id],
+              (err, result) => {
+                if (err) {
+                  console.error("Error updating reservation in MySQL:", err);
+                } else {
+                  console.log("Reservation updated successfully");
+                  successfulUpdates++;
+
+                  if (status === "Approved") {
+                    // Get a new connection from the pool for inserting approval data
+                    db.getConnection((approvalConnErr, approvalConnection) => {
+                      if (approvalConnErr) {
+                        console.log(
+                          "Error getting database connection:",
+                          approvalConnErr
+                        );
+                      } else {
+                        approvalConnection.query(
+                          "INSERT INTO tb_joborder (order_id, employee_id, reservation_id, date_issued, status) VALUES (?, (SELECT employee_id FROM tb_employee ORDER BY RAND() LIMIT 1), ?, NOW(), 'Ongoing')",
+                          [
+                            `JO-${currentYear}-${currentMonth}-${order_id}`,
+                            reservation_id,
+                          ],
+                          (err, result) => {
+                            if (err) {
+                              console.error(
+                                "Error inserting approval data in MySQL:",
+                                err
+                              );
+                            } else {
+                              console.log(
+                                "Approval data inserted successfully"
+                              );
+                            }
+
+                            // Release the connection back to the pool after inserting approval data
+                            approvalConnection.release();
+                          }
+                        );
+                      }
+                    });
                   }
                 }
-              );
-            }
-          }
 
-          if (successfulUpdates === updatedData.length) {
-            res.status(200).send("All reservations updated successfully");
-          }
+                if (successfulUpdates === updatedData.length) {
+                  // Release the connection back to the pool after updating all reservations
+                  updateConnection.release();
+                  res.status(200).send("All reservations updated successfully");
+                }
+              }
+            );
+          });
         });
-      });
-    }
-  );
+      }
+    );
+  });
 });
 
 router.get("/api/logout", (req, res) => {
@@ -355,51 +622,104 @@ router.get("/api/admin/logout", (req, res) => {
   return res.json({ Status: "Success" });
 });
 
-router.get('/api/usercount', (req, res) => {
-  const query = 'SELECT COUNT(*) AS usercount FROM tb_users';
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error('Error executing query:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json({ usercount: results[0].usercount });
+router.get("/api/usercount", (req, res) => {
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
     }
+
+    // Use the connection for querying
+    const query = "SELECT COUNT(*) AS usercount FROM tb_users";
+    connection.query(query, (error, results) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json({ usercount: results[0].usercount });
+      }
+    });
   });
 });
 
-router.get('/api/employeecount', (req, res) => {
-  const query = 'SELECT COUNT(*) AS employeecount FROM tb_employee';
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error('Error executing query:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json({ employeecount: results[0].employeecount });
+router.get("/api/employeecount", (req, res) => {
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
     }
+
+    // Use the connection for querying
+    const query = "SELECT COUNT(*) AS employeecount FROM tb_employee";
+    connection.query(query, (error, results) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json({ employeecount: results[0].employeecount });
+      }
+    });
   });
 });
 
-router.get('/api/pendingreservations', (req, res) => {
-  const query = 'SELECT COUNT(*) AS pendingreservations FROM tb_reservations WHERE status="Pending"';
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error('Error executing query:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json({ pendingreservations: results[0].pendingreservations });
+router.get("/api/pendingreservations", (req, res) => {
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
     }
+
+    // Use the connection for querying
+    const query =
+      'SELECT COUNT(*) AS pendingreservations FROM tb_reservations WHERE status="Pending"';
+    connection.query(query, (error, results) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json({ pendingreservations: results[0].pendingreservations });
+      }
+    });
   });
 });
 
-router.get('/api/totalreservations', (req, res) => {
-  const query = 'SELECT COUNT(*) AS totalreservations FROM tb_reservations';
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error('Error executing query:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json({ totalreservations: results[0].totalreservations });
+router.get("/api/totalreservations", (req, res) => {
+  // Get a connection from the pool
+  db.getConnection((connErr, connection) => {
+    if (connErr) {
+      console.log("Error getting database connection:", connErr);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
     }
+
+    // Use the connection for querying
+    const query = "SELECT COUNT(*) AS totalreservations FROM tb_reservations";
+    connection.query(query, (error, results) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json({ totalreservations: results[0].totalreservations });
+      }
+    });
   });
 });
 
