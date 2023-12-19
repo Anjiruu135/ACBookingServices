@@ -49,7 +49,7 @@ function Login() {
           <div className="container">
             <div
               className="row d-flex justify-content-center responsivestart"
-              style={{background: 'url("src/assets/images/slider-img.png") top right no-repeat, url("src/assets/images/professional-img.png") top left / contain no-repeat'}}
+              style={{background: 'url("images/slider-img.png") top right no-repeat, url("images/professional-img.png") top left / contain no-repeat'}}
             >
               <div className="col-md-6 col-xl-4 col-xxl-4">
                 <div className="card mb-5">

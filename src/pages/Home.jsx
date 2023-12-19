@@ -83,7 +83,7 @@ function Home() {
                   </div>
                   <div className="col-md-6">
                     <div className="img-box">
-                      <img src="src/assets/images/slider-img.png" alt="" />
+                      <img src="images/slider-img.png" alt="" />
                     </div>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ function Home() {
                 </div>
                 <div className="col-lg-7 col-md-6">
                   <div className="img-box">
-                    <img src="src/assets/images/about-img.jpg" alt="" />
+                    <img src="images/about-img.jpg" alt="" />
                   </div>
                 </div>
               </div>
@@ -185,7 +185,7 @@ function Home() {
               <div className="row">
                 <div className="col-md-6">
                   <div className="img-box">
-                    <img src="src/assets/images/professional-img.png" alt="" />
+                    <img src="images/professional-img.png" alt="" />
                   </div>
                 </div>
                 <div className="col-md-6 ">
@@ -217,7 +217,7 @@ function Home() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box ">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-01-primary.png" alt="" />
+                      <img src="images/icon-01-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Diagnostic Services</h5>
@@ -231,7 +231,7 @@ function Home() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box ">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-02-primary.png" alt="" />
+                      <img src="images/icon-02-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Regular Maintenance Checks</h5>
@@ -246,7 +246,7 @@ function Home() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box ">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-03-primary.png" alt="" />
+                      <img src="images/icon-03-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Refrigerant Recharge</h5>
@@ -277,7 +277,7 @@ function Home() {
                   <img
                     className="card-img-top w-100 d-block fit-cover"
                     style={{ height: "200px" }}
-                    src="src/assets/images/testimonial-1.jpg"
+                    src="images/testimonial-1.jpg"
                   />
                   <div className="card-body p-4">
                     <h4 className="card-title">Client 1</h4>
@@ -298,7 +298,7 @@ function Home() {
                   <img
                     className="card-img-top w-100 d-block fit-cover"
                     style={{ height: "200px" }}
-                    src="src/assets/images/testimonial-2.jpg"
+                    src="images/testimonial-2.jpg"
                   />
                   <div className="card-body p-4">
                     <h4 className="card-title">Client 2</h4>
@@ -318,7 +318,7 @@ function Home() {
                   <img
                     className="card-img-top w-100 d-block fit-cover"
                     style={{ height: "200px" }}
-                    src="src/assets/images/testimonial-3.jpg"
+                    src="images/testimonial-3.jpg"
                   />
                   <div className="card-body p-4">
                     <h4 className="card-title">Client 3</h4>
@@ -427,7 +427,7 @@ function Home() {
                           height: "150%",
                           marginTop: "-75px",
                         }}
-                        src="src/assets/images/team-1.jpg"
+                        src="images/team-1.jpg"
                       />
                     </div>
                   </div>

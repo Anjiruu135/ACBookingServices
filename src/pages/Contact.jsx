@@ -78,7 +78,7 @@ function Contact() {
                   marginLeft: "auto",
                   marginRight: "auto",
                   background:
-                    'url("src/assets/images/professional-img.png") 250px 0px / contain no-repeat',
+                    'url("images/professional-img.png") 250px 0px / contain no-repeat',
                   color: "rgba(3, 85, 204, 1)",
                 }}
               >
@@ -179,7 +179,7 @@ function Contact() {
                           height: "150%",
                           marginTop: "-75px",
                         }}
-                        src="src/assets/images/team-2.jpg"
+                        src="images/team-2.jpg"
                       />
                     </div>
                   </div>

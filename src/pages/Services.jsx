@@ -30,7 +30,7 @@ function Services() {
                   marginLeft: "auto",
                   marginRight: "auto",
                   background:
-                    'url("src/assets/images/professional-img.png") 250px 0px / contain no-repeat',
+                    'url("images/professional-img.png") 250px 0px / contain no-repeat',
                   color: "rgba(3, 85, 204, 1)",
                 }}
               >
@@ -45,7 +45,7 @@ function Services() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-01-primary.png" alt="" />
+                      <img src="images/icon-01-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Diagnostic Services</h5>
@@ -60,7 +60,7 @@ function Services() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-02-primary.png" alt="" />
+                      <img src="images/icon-02-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Regular Maintenance Checks</h5>
@@ -75,7 +75,7 @@ function Services() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-03-primary.png" alt="" />
+                      <img src="images/icon-03-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Refrigerant Recharge</h5>
@@ -90,7 +90,7 @@ function Services() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-04-primary.png" alt="" />
+                      <img src="images/icon-04-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Cleaning and Filter Replacement</h5>
@@ -106,7 +106,7 @@ function Services() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-05-primary.png" alt="" />
+                      <img src="images/icon-05-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Fan Motor Maintenance</h5>
@@ -121,7 +121,7 @@ function Services() {
                 <div className="col-sm-6 col-md-4 mx-auto">
                   <div className="box">
                     <div className="img-box">
-                      <img src="src/assets/images/icon-06-primary.png" alt="" />
+                      <img src="images/icon-06-primary.png" alt="" />
                     </div>
                     <div className="detail-box">
                       <h5>Comprehensive System Checkup</h5>
